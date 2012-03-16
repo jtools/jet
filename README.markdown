@@ -1,2 +1,3 @@
-# Joomla! Extension Tools
+Joomla! Extension Tools
+=======================
 The Joomla! Extension Tools are a set of tools to help developers in creating, packaging and distributing Joomla! extensions.
