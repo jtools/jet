@@ -14,6 +14,10 @@ class HelloYou extends JCli
 	
 	public function execute()
 	{
+		JLoader::register('JBuilderBase', JPATH_BASE.'/helpers/base.php');
+		JLoader::register('JIndexFiles', JPATH_BASE.'/helpers/indexfiles.php');
+		JLoader::register('JManifest', JPATH_BASE.'/helpers/manifest.php');
+
 		$this->out(str_repeat('=', 79));
 		$text = 'JOOMLA! EXTENSION TOOLS';
 		$this->out(str_repeat(' ', (79 - strlen($text))/2).$text);
