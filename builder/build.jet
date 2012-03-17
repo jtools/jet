@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jet>
+	<components>
+		<component>
+			<name>com_content</name>
+			<version>2.5</version>
+		</component>
+	</components>
+	<files>
+		<file>
+			<name>site-application</name>
+			<version>2.5</version>
+		</file>
+	</files>
+	<languages>
+		<language>
+			<name>en-GB</name>
+			<version>2.5</version>
+		</language>
+	</languages>
+	<librarys>
+		<library>
+			<name>joomla</name>
+			<version>2.5</version>
+		</library>
+	</librarys>
+	<modules>
+		<module>
+			<name>mod_menu</name>
+			<client>admin</client>
+			<version>2.5</version>
+			<config><!-- Here are the JForm Field defs --></config>
+		</module>
+	</modules>
+	<plugins>
+		<plugin>
+			<name>plg_debug</name>
+			<folder>system</folder>
+			<version>2.5</version>
+			<config><!-- Here are the JForm Field defs --></config>
+		</plugin>
+	</plugins>
+	<templates>
+		<template>
+			<name>beez</name>
+			<client>admin</client>
+			<version>2.5</version>
+			<config><!-- Here are the JForm Field defs --></config>
+		</template>
+	</templates>
+	<packages>
+		<package>
+			<name>Joomla</name>
+			<version>2.5</version>
+			<extensions>
+				<extension type="component">com_content</extension>
+			</extensions>
+		</package>
+	</packages>
+</jet>
