@@ -3,9 +3,22 @@ class JBuilderExtension
 {
 	public static function getInstance($type)
 	{
-		$type = substr($type, 0, -1);
+		$types = array(
+			'components' => 'component',
+			'files' => 'file',
+			'languages' => 'language',
+			'libraries' => 'library',
+			'modules' => 'module',
+			'plugins' => 'plugin',
+			'templates' => 'template',
+			'packages' => 'package'
+		);
 		
-		$class = 'JBuilder'.$type;
+		if(!isset($types[$type])) {
+			throw new Exception('Unsupported extension type');
+		}
+		
+		$class = 'JBuilder'.$types[$type];
 
 		$instance = new $class;
 		

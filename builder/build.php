@@ -14,6 +14,8 @@ class JoomlaExtensionBuilder extends JCli
 	
 	protected $verbose = false;
 	
+	protected $options = array();
+	
 	public function execute()
 	{
 		JLoader::discover('JBuilderHelper', JPATH_BASE.'/helpers/');
@@ -78,19 +80,32 @@ class JoomlaExtensionBuilder extends JCli
 			$this->out('[config] Not a valid JET file');
 			$this->close(1);
 		}
-		
+
+		if($common = $xml->xpath('common'))
+		{
+			$allowedGlobalOptions = array('copyright', 'version', 'email', 'website');
+			foreach($common[0]->children() as $option) {
+				if(in_array($option->getName(), $allowedGlobalOptions)) {
+					$this->options[$option->getName()] = (string) $option;
+				}
+			}
+		}
+
 		$types = array(
-			'component',
-			'file',
-			'language',
-			'library',
-			'module',
-			'plugin',
-			'template',
-			'package'
+			'components' => 'component',
+			'files' => 'file',
+			'languages' => 'language',
+			'libraries' => 'library',
+			'modules' => 'module',
+			'plugins' => 'plugin',
+			'templates' => 'template',
+			'packages' => 'package'
 		);
 		
 		foreach($xml->children() as $child) {
+			if(!in_array($child->getName(), array_keys($types))) {
+				continue;
+			}
 			$this->types[] = $child->getName();
 			$this->extensions[$child->getName()] = array();
 			
