@@ -1,5 +1,5 @@
 <?php
-class JExtensionBuilderPackage extends JExtensionBuilder
+class JBuilderPackage extends JBuilderExtension
 {
 	public function build()
 	{

@@ -16,10 +16,8 @@ class JoomlaExtensionBuilder extends JCli
 	
 	public function execute()
 	{
-		JLoader::register('JBuilderBase', JPATH_BASE.'/helpers/base.php');
-		JLoader::register('JIndexFiles', JPATH_BASE.'/helpers/indexfiles.php');
-		JLoader::register('JManifest', JPATH_BASE.'/helpers/manifest.php');
-		JLoader::register('JExtensionBuilder', JPATH_BASE.'/extensions/extension.php');
+		JLoader::discover('JBuilderHelper', JPATH_BASE.'/helpers/');
+		JLoader::discover('JBuilder', JPATH_BASE.'/extensions/');
 
 		$this->out(str_repeat('=', 79));
 		$text = 'JOOMLA! EXTENSION TOOLS';
@@ -28,20 +26,20 @@ class JoomlaExtensionBuilder extends JCli
 		$this->out(str_repeat(' ', (79 - strlen($text))/2).$text);
 		$this->out(str_repeat('=', 79));
 
+		$this->loadPropertiesFromCLI();
+		
 		if(count($this->input->args)) {
 			$this->loadPropertiesFromFile($this->input->args[0]);
 		} else {
 			$this->loadPropertiesFromInput();
 		}
 		
-		$this->loadPropertiesFromCLI();
-		
 		$types = array();
 		
 		foreach($this->types as $type) {
 			$types[$type] = 0;
 			foreach($this->extensions[$type] as $extension) {
-				$adapter = JExtensionBuilder::getInstance($type, $extension);
+				$adapter = JBuilderExtension::getInstance($type, $extension);
 		
 				$adapter->build();
 				$types[$type]++;
@@ -80,6 +78,17 @@ class JoomlaExtensionBuilder extends JCli
 			$this->out('[config] Not a valid JET file');
 			$this->close(1);
 		}
+		
+		$types = array(
+			'component',
+			'file',
+			'language',
+			'library',
+			'module',
+			'plugin',
+			'template',
+			'package'
+		);
 		
 		foreach($xml->children() as $child) {
 			$this->types[] = $child->getName();

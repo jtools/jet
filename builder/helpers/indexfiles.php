@@ -1,6 +1,6 @@
 <?php
 
-class JIndexFiles extends JBuilderBase {
+class JBuilderHelperIndexfiles extends JBuilderHelperBase {
 
 	public $path = null;
 	private $dir = null;

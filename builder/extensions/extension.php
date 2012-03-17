@@ -1,12 +1,11 @@
 <?php
-class JExtensionBuilder
+class JBuilderExtension
 {
 	public static function getInstance($type)
 	{
 		$type = substr($type, 0, -1);
-		require_once(JPATH_BASE.'/extensions/'.$type.'.php');
 		
-		$class = 'JExtensionBuilder'.$type;
+		$class = 'JBuilder'.$type;
 
 		$instance = new $class;
 		

@@ -1,6 +1,6 @@
 <?php
 
-class JManifestBuilder extends JBuilderBase {
+class JBuilderHelperManifest extends JBuilderHelperBase {
 
 	private $type = null;
 	private $extname = null;

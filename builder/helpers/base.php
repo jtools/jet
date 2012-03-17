@@ -1,5 +1,5 @@
 <?php
-class JBuilderBase
+class JBuilderHelperBase
 {
 	public function log($msg)
 	{
