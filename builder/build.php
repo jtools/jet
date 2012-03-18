@@ -22,10 +22,8 @@ class JoomlaExtensionBuilder extends JCli
 		JLoader::discover('JBuilder', JPATH_BASE.'/extensions/');
 
 		$this->out(str_repeat('=', 79));
-		$text = 'JOOMLA! EXTENSION TOOLS';
-		$this->out(str_repeat(' ', (79 - strlen($text))/2).$text);
-		$text = 'Extension Builder';
-		$this->out(str_repeat(' ', (79 - strlen($text))/2).$text);
+		$this->out('JOOMLA! EXTENSION TOOLS',true,true);
+		$this->out('Extension Builder',true,true);
 		$this->out(str_repeat('=', 79));
 
 		$this->loadPropertiesFromCLI();
@@ -39,6 +37,7 @@ class JoomlaExtensionBuilder extends JCli
 		$types = array();
 		
 		foreach($this->extensions as $extension) {
+			$this->isFolderPrepared($extension->getType());
 			if(is_bool($extension->check())) {
 				$extension->build();
 			} else {
@@ -140,6 +139,30 @@ class JoomlaExtensionBuilder extends JCli
 			$this->verbose = true;
 			$this->out('[config] verbose mode enabled');
 		}
+	}
+	
+	protected function isFolderPrepared($type)
+	{
+		
+	}
+	
+		/**
+	 * Write a string to standard output.
+	 *
+	 * @param   string   $text  The text to display.
+	 * @param   boolean  $nl    True (default) to append a new line at the end of the output string.
+	 *
+	 * @return  JApplicationCli  Instance of $this to allow chaining.
+	 *
+	 * @codeCoverageIgnore
+	 * @since   11.1
+	 */
+	public function out($text = '', $nl = true, $center = false)
+	{
+		if($center) $text = str_repeat(' ', (79 - strlen($text))/2).$text;
+		fwrite(STDOUT, $text . ($nl ? "\n" : null));
+
+		return $this;
 	}
 }
 
