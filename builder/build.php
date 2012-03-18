@@ -38,13 +38,11 @@ class JoomlaExtensionBuilder extends JCli
 		
 		$types = array();
 		
-		foreach($this->types as $type) {
-			$types[$type] = 0;
-			foreach($this->extensions[$type] as $extension) {
-				$adapter = JBuilderExtension::getInstance($type, $extension);
-		
-				$adapter->build();
-				$types[$type]++;
+		foreach($this->extensions as $extension) {
+			if(is_bool($extension->check())) {
+				$extension->build();
+			} else {
+				//throw error
 			}
 		}
 		
@@ -101,19 +99,33 @@ class JoomlaExtensionBuilder extends JCli
 			'templates' => 'template',
 			'packages' => 'package'
 		);
-		
-		foreach($xml->children() as $child) {
-			if(!in_array($child->getName(), array_keys($types))) {
+
+		foreach($types as $tag => $type) {
+			$extensions = $xml->xpath($tag.'/'.$type);
+			if(count($extensions) == 0) {
 				continue;
 			}
-			$this->types[] = $child->getName();
-			$this->extensions[$child->getName()] = array();
 			
-			foreach($child->children() as $extension) {
-				$this->extensions[$child->getName()][] = $extension;
+			$options = call_user_func(array('JBuilder'.$type, 'getOptions'));
+			
+			$opts = $this->options;
+			foreach($extensions as $extension) {
+				foreach($extension->children() as $exopt) {
+					if(!in_array($exopt->getName(), $options)) {
+						continue;
+					}
+					
+					if($exopt->count()) {
+						$opts[$exopt->getName()] = $exopt->children();
+					} elseif(count($exopt->attributes())) {
+						$opts[$exopt->getName()] = $exopt->attributes();
+					} else {
+						$opts[$exopt->getName()] = (string) $exopt;
+					}
+				}
+				$this->extensions[] = JBuilderExtension::getInstance($type, $opts);
 			}
 		}
-		
 	}
 
 	protected function loadPropertiesFromInput()

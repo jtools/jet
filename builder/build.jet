@@ -23,6 +23,7 @@
 	<languages>
 		<language>
 			<name>en-GB</name>
+			<client>admin</client>
 		</language>
 	</languages>
 	<libraries>

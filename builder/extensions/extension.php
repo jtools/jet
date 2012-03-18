@@ -1,26 +1,26 @@
 <?php
 class JBuilderExtension
 {
-	public static function getInstance($type)
+	public static function getInstance($type, $options)
 	{
 		$types = array(
-			'components' => 'component',
-			'files' => 'file',
-			'languages' => 'language',
-			'libraries' => 'library',
-			'modules' => 'module',
-			'plugins' => 'plugin',
-			'templates' => 'template',
-			'packages' => 'package'
+			'component', 
+			'file', 
+			'language', 
+			'library', 
+			'module', 
+			'plugin', 
+			'template', 
+			'package'
 		);
 		
-		if(!isset($types[$type])) {
+		if(!in_array($type, $types)) {
 			throw new Exception('Unsupported extension type');
 		}
-		
-		$class = 'JBuilder'.$types[$type];
+		var_dump($options);
+		$class = 'JBuilder'.$type;
 
-		$instance = new $class;
+		$instance = new $class($options);
 		
 		return $instance;
 	}	
