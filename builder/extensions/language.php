@@ -3,7 +3,7 @@ class JBuilderLanguage extends JBuilderExtension
 {
 	static function getOptions()
 	{
-		return array('copyright', 'version', 'email', 'website', 'client', 'tag');
+		return array_merge(parent::getOptions(), array('client', 'tag'));
 	}
 	
 	public function check()

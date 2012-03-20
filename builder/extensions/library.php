@@ -3,7 +3,7 @@ class JBuilderLibrary extends JBuilderExtension
 {
 	static function getOptions()
 	{
-		return array('copyright', 'version', 'email', 'website');
+		return parent::getOptions();
 	}
 	
 	public function check()

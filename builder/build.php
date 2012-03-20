@@ -1,6 +1,9 @@
 <?php
 define( '_JEXEC', 1 );
 define('JPATH_BASE', dirname(__FILE__));
+define('JPATH_ROOT', realpath(JPATH_BASE.'/../'));
+
+$GLOBALS['timer'] = explode(' ', microtime());
 
 require_once '../libraries/import.php';
 
@@ -16,10 +19,15 @@ class JoomlaExtensionBuilder extends JCli
 	
 	protected $options = array();
 	
+	protected $buildfolder = null;
+	
+	protected $joomlafolder = null;
+	
 	public function execute()
 	{
 		JLoader::discover('JBuilderHelper', JPATH_BASE.'/helpers/');
 		JLoader::discover('JBuilder', JPATH_BASE.'/extensions/');
+		JLoader::discover('J', JPATH_BASE.'/../libraries/joomla/filesystem/');
 
 		$this->out(str_repeat('=', 79));
 		$this->out('JOOMLA! EXTENSION TOOLS',true,true);
@@ -34,14 +42,21 @@ class JoomlaExtensionBuilder extends JCli
 			$this->loadPropertiesFromInput();
 		}
 		
+		if(!$this->joomlafolder) {
+			$this->out('*FATAL ERROR* No Joomla installation as build source given!');
+			$this->close(1);
+		}
+		
 		$types = array();
 		
 		foreach($this->extensions as $extension) {
-			$this->isFolderPrepared($extension->getType());
-			if(is_bool($extension->check())) {
+			$folder = $this->isFolderPrepared($extension->getType(), $extension);
+			try {
+				$extension->check();
 				$extension->build();
-			} else {
-				//throw error
+			} catch(Exception $e) {
+				$this->out($e->getMessage());
+				$this->close(1);
 			}
 		}
 		
@@ -50,6 +65,9 @@ class JoomlaExtensionBuilder extends JCli
 		foreach($types as $type => $count) {
 			$this->out($type.': '.$count);
 		}
+		
+		$time = explode(' ', microtime());		
+		$this->out('Time elapsed: '.(($time[0] - $GLOBALS['timer'][0]) + (float) ($time[1] - $GLOBALS['timer'][1])));
 		
 		$this->close(0);
 	}
@@ -85,9 +103,22 @@ class JoomlaExtensionBuilder extends JCli
 				if(in_array($option->getName(), $allowedGlobalOptions)) {
 					$this->options[$option->getName()] = (string) $option;
 				}
+				if($option->getName() == 'joomla' && !$this->joomlafolder && is_dir((string) $option)) {
+					$this->joomlafolder = (string) $option;
+				}
 			}
 		}
 
+		if(!$this->buildfolder) {
+			$this->buildfolder = $this->joomlafolder.'.build/';
+			if(!is_dir($this->buildfolder)) {
+				JFolder::create($this->buildfolder);
+				$this->out('[info] Creating '.$this->buildfolder.' for building');
+			} else {
+				$this->out('[info] Using '.$this->buildfolder.' for building');
+			}
+		}
+		
 		$types = array(
 			'components' => 'component',
 			'files' => 'file',
@@ -122,7 +153,12 @@ class JoomlaExtensionBuilder extends JCli
 						$opts[$exopt->getName()] = (string) $exopt;
 					}
 				}
-				$this->extensions[] = JBuilderExtension::getInstance($type, $opts);
+				$adapter = JBuilderExtension::getInstance($type, $opts);
+				
+				$adapter->set('joomlafolder', $this->joomlafolder);
+				$adapter->set('buildfolder', $this->buildfolder.$type.'/'.$opts['name'].'/');
+
+				$this->extensions[] = $adapter;
 			}
 		}
 	}
@@ -139,11 +175,50 @@ class JoomlaExtensionBuilder extends JCli
 			$this->verbose = true;
 			$this->out('[config] verbose mode enabled');
 		}
+		
+		if($this->input->get('j')) {
+			$this->joomlafolder = $this->input->get('j', null, 'STRING');
+		} elseif($this->input->get('joomla')) {
+			$this->joomlafolder = $this->input->get('joomla', null, 'STRING');
+		}
+		if($this->joomlafolder) {
+			if(is_dir($this->joomlafolder)){
+				$this->out('[info] Using '.$this->joomlafolder.' as build source');
+			} else {
+				$this->out('*FATAL ERROR* Given folder for Joomla installation is not reachable!');
+				$this->close(1);
+			}
+		}
+		
+		if($this->input->get('b')) {
+			$this->buildfolder = $this->input->get('b', null, 'STRING');
+		} elseif($this->input->get('build')) {
+			$this->buildfolder = $this->input->get('build', null, 'STRING');
+		}
+		
+		if($this->buildfolder) {
+			if(is_dir($this->buildfolder)){
+				$this->out('[info] Using '.$this->buildfolder.' for building');
+			} else {
+				if(!JFolder::create($this->buildfolder)) {
+					$this->out('*FATAL ERROR* Given folder for building is not reachable!');
+					$this->close(1);
+				} else {
+					$this->out('[info] Creating '.$this->buildfolder.' for building');
+				}
+			}
+		}
+		
 	}
 	
-	protected function isFolderPrepared($type)
+	protected function isFolderPrepared($type, $extension)
 	{
-		
+		if(!is_dir($this->buildfolder.$type.'/'))
+		{
+			JFolder::create($this->buildfolder.$type.'/');
+		}
+		$extension->set('buildfolder', $this->buildfolder.$type.'/'.$extension->get('name').'/');
+		return true;
 	}
 	
 		/**

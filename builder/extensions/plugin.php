@@ -3,7 +3,7 @@ class JBuilderPlugin extends JBuilderExtension
 {
 	static function getOptions()
 	{
-		return array('copyright', 'version', 'email', 'website', 'sql', 'config');
+		return array_merge(parent::getOptions(), array('sql', 'config'));
 	}
 	
 	public function check()

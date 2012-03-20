@@ -3,7 +3,7 @@ class JBuilderFile extends JBuilderExtension
 {
 	static function getOptions()
 	{
-		return array('copyright', 'version', 'email', 'website', 'files', 'sql');
+		return array_merge(parent::getOptions(), array('files', 'sql'));
 	}
 
 	public function check()

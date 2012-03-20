@@ -3,7 +3,7 @@ class JBuilderTemplate extends JBuilderExtension
 {
 	static function getOptions()
 	{
-		return array('copyright', 'version', 'email', 'website', 'config');
+		return array_merge(parent::getOptions(), array('config'));
 	}
 	
 	public function check()

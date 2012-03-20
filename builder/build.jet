@@ -37,6 +37,11 @@
 			<client>admin</client>
 			<config><!-- Here are the JForm Field defs --></config>
 		</module>
+		<module>
+			<name>mod_languages</name>
+			<client>site</client>
+			<config><!-- Here are the JForm Field defs --></config>
+		</module>
 	</modules>
 	<plugins>
 		<plugin>
