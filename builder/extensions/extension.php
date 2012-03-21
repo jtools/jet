@@ -127,14 +127,17 @@ class JBuilderExtension
 	protected function createPackage()
 	{
 		$this->out('['.$this->name.'] Creating ZIP package');
-				/**<!-- Zipping up the component package -->
-		<echo msg="Zipping up the component package" />
-
-		<delete file="${project.build-folder}/${component.name}.zip" quiet="true" />
-		<zip destfile="${project.build-folder}/${component.name}.zip">
-			<fileset dir="${project.build-folder}/components/${component.name}" />
-		</zip>
-		<echo msg="ZIP file created!" />**/
+		
+		$adapter = JArchive::getAdapter('zip');
+		
+		$files = JFolder::files($this->buildfolder, null, true, true);
+		$path = strtolower(realpath($this->buildfolder));
+		foreach($files as &$file) {
+			$f = array('name' => str_replace('//', '/', str_replace('\\', '/', str_replace($path,'',$file))));
+			$f['data'] = file_get_contents($file);
+			$file = $f;
+		}
+		$adapter->create($this->buildfolder.$this->name.'.zip', $files);
 	}
 	
 	/**

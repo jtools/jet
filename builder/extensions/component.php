@@ -34,53 +34,18 @@ class JBuilderComponent extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' COMPONENT...');
 		$this->out(str_repeat('-', 79));
 		
-		/**
-	<!-- This target builds a Joomla component package-->
-	<target name="component-build" depends="component-build-prepare">
-	
-		<!-- Processing backend component part -->
-		<if>
-			<available file="${project.joomla-folder}/administrator/components/${component.name}" type="dir" />
-			<then>
-				<echo msg="Found a backend component part!" />
-				<property name="component.admin" value="true" />
-				<echo msg="Creating folder for backend component part." /> 
-				<mkdir dir="${project.build-folder}/components/${component.name}/admin" />
-				<echo msg="Copy the files for backend component part." />
-				<copy todir="${project.build-folder}/components/${component.name}/admin">
-					<fileset dir="${project.joomla-folder}/administrator/components/${component.name}">
-						<include name="**" />
-						<exclude name="manifest.xml" />
-					</fileset>
-				</copy>
-				<echo msg="----------------------------------------" />
-			</then>
-			<else>
-				<property name="component.admin" value="false" />
-			</else>
-		</if>
+		if(is_dir($this->joomlafolder.'administrator/components/'.$this->name.'/')) {
+			$this->out('['.$this->name.'] Found administrator files');
+			JFolder::create($this->buildfolder.'admin');
+			JFolder::copy($this->joomlafolder.'administrator/components/'.$this->name.'/', $this->buildfolder.'admin', '', true);
+		}
 		
-		<!-- Processing frontend component part -->
-		<if>
-			<available file="${project.joomla-folder}/components/${component.name}" type="dir" />
-			<then>
-				<echo msg="Found a frontend component part!" />
-				<property name="component.front" value="true" />
-				<echo msg="Creating folder for frontend component part." /> 
-				<mkdir dir="${project.build-folder}/components/${component.name}/front" />
-				<echo msg="Copy the files for frontend component part." />
-				<copy todir="${project.build-folder}/components/${component.name}/front">
-					<fileset dir="${project.joomla-folder}/components/${component.name}">
-						<include name="**" />
-					</fileset>
-				</copy>
-				<echo msg="----------------------------------------" />
-			</then>
-			<else>
-				<property name="component.front" value="false" />
-			</else>
-		</if>
-**/
+		if(is_dir($this->joomlafolder.'components/'.$this->name.'/')) {
+			$this->out('['.$this->name.'] Found frontend files');
+			JFolder::create($this->buildfolder.'site');
+			JFolder::copy($this->joomlafolder.'components/'.$this->name.'/', $this->buildfolder.'site', '', true);
+		}
+		
 		$this->prepareMediaFiles();
 		
 		$this->prepareLanguageFiles(array('site', 'admin'));
