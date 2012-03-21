@@ -64,9 +64,14 @@ class JBuilderExtension
 		return true;
 	}
 	
-	protected function getManifestData()
+	protected function setManifestData(JBuilderHelperManifest $manifest)
 	{
-		return array();
+		$manifest->setType($this->getType());
+		$manifest->setAuthor($this->options['author']);
+		$manifest->setExtName($this->name);
+		$manifest->setBuildFolder($this->buildfolder);
+		$manifest->setVersion($this->options['version']);
+		return $manifest;
 	}
 	
 	protected function prepareMediaFiles()

@@ -98,7 +98,7 @@ class JoomlaExtensionBuilder extends JCli
 
 		if($common = $xml->xpath('common'))
 		{
-			$allowedGlobalOptions = array('copyright', 'version', 'email', 'website');
+			$allowedGlobalOptions = array('copyright', 'version', 'email', 'website', 'author');
 			foreach($common[0]->children() as $option) {
 				if(in_array($option->getName(), $allowedGlobalOptions)) {
 					$this->options[$option->getName()] = (string) $option;

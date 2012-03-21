@@ -8,7 +8,7 @@ class JBuilderLibrary extends JBuilderExtension
 	
 	public function check()
 	{
-		return true;
+		return parent::check();
 	}
 
 	public function build()
@@ -24,6 +24,13 @@ class JBuilderLibrary extends JBuilderExtension
 		$this->addIndexFiles();
 		
 		$manifest = new JBuilderHelperManifest();
+		
+		$manifest = $this->setManifestData($manifest);
+		
+		//Here the missing options have to be set
+
+		//Here we should save the manifest file to the disk
+		//$this->out($manifest->main());
 		
 		$this->createPackage();
 		

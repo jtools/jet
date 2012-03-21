@@ -8,7 +8,7 @@ class JBuilderLanguage extends JBuilderExtension
 	
 	public function check()
 	{
-		return true;
+		return parent::check();
 	}
 
 	public function build()
@@ -22,6 +22,14 @@ class JBuilderLanguage extends JBuilderExtension
 		$this->addIndexFiles();
 		
 		$manifest = new JBuilderHelperManifest();
+		
+		$manifest = $this->setManifestData($manifest);
+		
+		//Here the missing options have to be set
+		$manifest->setClient('both'); //Setting this to 'both' temporarily for testing purposes
+		
+		//Here we should save the manifest file to the disk
+		//$this->out($manifest->main());
 		
 		$this->createPackage();
 		

@@ -4,6 +4,7 @@
 		<!-- These settings are merged into 
 			every extension scope and get overwritten 
 			by the extension specific settings -->
+		<author>Joomla!</author>
 		<copyright>(C) 2005 - 2011 Open Source Matters. All rights reserved.</copyright>
 		<version>2.5</version>
 		<email>admin@joomla.org</email>

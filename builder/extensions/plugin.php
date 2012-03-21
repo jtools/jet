@@ -1,6 +1,8 @@
 <?php
 class JBuilderPlugin extends JBuilderExtension
 {
+	protected $folder = null;
+	
 	static function getOptions()
 	{
 		return array_merge(parent::getOptions(), array('sql', 'config'));
@@ -28,7 +30,7 @@ class JBuilderPlugin extends JBuilderExtension
 
 		 */
 		
-		return true;
+		return parent::check();
 	}
 
 	public function build()
@@ -37,42 +39,26 @@ class JBuilderPlugin extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' PLUGIN...');
 		$this->out(str_repeat('-', 79));
 		
-		/**
-		<echo msg="Creating folder for the plugin." /> 
-		<mkdir dir="${project.build-folder}/plugins/${plugin.client}/${plugin.name}" />
-		<echo msg="Copy the files for the plugin." />
-		<copy todir="${project.build-folder}/plugins/${plugin.client}/${plugin.name}">
-			<fileset dir="${plugin.folder}">
-				<include name="**" />
-				<exclude name="${plugin.name}.xml" />
-			</fileset>
-		</copy>
-		<echo msg="----------------------------------------" />
-		**/
+		$parts = explode('_', $this->name, 3);
+		if(is_dir($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[0].'/')) {
+			$this->out('['.$this->name.'] Found frontend files');
+			JFolder::copy($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[0].'/', $this->buildfolder, '', true);
+		}
 		
 		$this->prepareMediaFiles();
 
 		$this->prepareLanguageFiles(array('admin'));
 		
 		$this->addIndexFiles();
-		/**		
-		<!-- Creating manifest file -->
-		<echo msg="Creating manifest file" />
-		<joomlamanifest 
-			type="plugin" 
-			extname="${plugin.name}" 
-			buildfolder="${project.build-folder}/plugins/${plugin.client}/${plugin.name}" 
-			version="${plugin.version}"
-			copyright="${plugin.copyright}"
-			author="${project.author}"
-			email="${project.email}"
-			website="${project.website}"
-			license="${project.license}"
-			update="${plugin.update}"
-		/>
-		<echo msg="Manifest file created!" />
-		<echo msg="----------------------------------------" />
-		 */
+
+		$manifest = new JBuilderHelperManifest();
+		
+		$manifest = $this->setManifestData($manifest);
+		
+		//Here the missing options have to be set
+
+		//Here we should save the manifest file to the disk
+		$this->out($manifest->main());
 		
 		$this->createPackage();
 		

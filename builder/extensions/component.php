@@ -55,25 +55,13 @@ class JBuilderComponent extends JBuilderExtension
 		$this->addIndexFiles();
 		
 		$manifest = new JBuilderHelperManifest();
-		/**
-		<!-- Creating manifest file -->
-		<echo msg="Creating manifest file" />
-		<joomlamanifest 
-			type="component" 
-			extname="${component.name}" 
-			buildfolder="${project.build-folder}/components/${component.name}" 
-			version="${component.version}"
-			copyright="${component.copyright}"
-			author="${project.author}"
-			email="${project.email}"
-			website="${project.website}"
-			license="${project.license}"
-			update="${component.update}"
-		/>
-		<echo msg="Manifest file created!" />
-		<echo msg="----------------------------------------" />
-		 */
 		
+		$manifest = $this->setManifestData($manifest);
+		
+		//Here the missing options have to be set
+
+		//Here we should save the manifest file to the disk
+		$this->out($manifest->main());
 		
 		$this->createPackage();
 		

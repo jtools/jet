@@ -27,7 +27,7 @@ class JBuilderModule extends JBuilderExtension
 	-->
 
 		 */
-		return true;
+		return parent::check();;
 	}
 
 	public function build()
@@ -62,23 +62,15 @@ class JBuilderModule extends JBuilderExtension
 		$this->prepareLanguageFiles($this->options['client']);
 
 		$this->addIndexFiles();
-/**
-		<!-- Creating manifest file -->
-		<echo msg="Creating manifest file" />
-		<joomlamanifest 
-			type="module" 
-			extname="${module.name}" 
-			buildfolder="${project.build-folder}/modules/${module.client}/${module.name}" 
-			version="${module.version}"
-			copyright="${module.copyright}"
-			author="${project.author}"
-			email="${project.email}"
-			website="${project.website}"
-			license="${project.license}"
-			update="${module.update}"
-		/>
-		<echo msg="Manifest file created!" />
-		<echo msg="----------------------------------------" />**/
+
+		$manifest = new JBuilderHelperManifest();
+		
+		$manifest = $this->setManifestData($manifest);
+		
+		//Here the missing options have to be set
+
+		//Here we should save the manifest file to the disk
+		$this->out($manifest->main());
 	
 		$this->createPackage();
 		

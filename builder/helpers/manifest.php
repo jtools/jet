@@ -138,7 +138,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		$this->dom->appendChild($root);
 		
 		//For debugging
-		echo $this->dom->saveXML();
+		return $this->dom->saveXML();
 		//For actual deployment
 		//file_put_contents($this->buildfolder.'/manifest.xml', $this->dom->saveXML());
 	}
@@ -534,6 +534,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	{
 		$dir = opendir($folder);
 		while(false !== ($entry = readdir($dir))) {
+			$e = null;
 			if(is_file($folder.$entry)) {
 				$e = $this->dom->createElement('filename', $entry);
 			} elseif(is_dir($folder.$entry) && $entry != '.' && $entry != '..') {
@@ -548,29 +549,29 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	private function checkAttributes()
 	{
 		if (!isset($this->type)) {
-			throw new BuildException("Missing attribute 'type'");
+			throw new Exception("Missing attribute 'type'");
 		}
 		
 		if (!isset($this->extname)) {
-			throw new BuildException("Missing attribute 'extname'");
+			throw new Exception("Missing attribute 'extname'");
 		}
 		
 		if (!isset($this->buildfolder)) {
-			throw new BuildException("Missing attribute 'buildfolder'");
+			throw new Exception("Missing attribute 'buildfolder'");
 		}
 		
 		if (!isset($this->version)) {
-			throw new BuildException("Missing attribute 'version'");
+			throw new Exception("Missing attribute 'version'");
 		}
 		
 		if ($this->type == 'plugin' && !isset($this->folder)) {
-			throw new BuildException("Missing attribute 'folder'");
+			throw new Exception("Missing attribute 'folder'");
 		}
 		
 		$types = array('module', 'template', 'language');
 		$clients = array('site', 'administrator', 'both');
 		if (in_array($this->type, $types) && (!isset($this->client) || !in_array($this->client, $clients))) {
-			throw new BuildException("Missing attribute 'client' or client not valid");
+			throw new Exception("Missing attribute 'client' or client not valid");
 		}
 	}
 }
