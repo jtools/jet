@@ -9,6 +9,7 @@
 		<version>2.5</version>
 		<email>admin@joomla.org</email>
 		<website>http://www.joomla.org</website>
+		<license>GPL</license>
 	</common>
 	<components>
 		<component>
@@ -19,23 +20,31 @@
 	<files>
 		<file>
 			<name>site-application</name>
+			<files>
+				<file>index.php</file>
+				<folder>includes</folder>
+			</files>
 		</file>
 	</files>
 	<languages>
 		<language>
 			<name>en-GB</name>
 			<client>admin</client>
+			<tag>en-GB</tag>
 		</language>
 	</languages>
 	<libraries>
 		<library>
 			<name>joomla</name>
+			<files>
+				<folder>joomla</folder>
+			</files>
 		</library>
 	</libraries>
 	<modules>
 		<module>
 			<name>mod_menu</name>
-			<client>admin</client>
+			<client>administrator</client>
 			<config><!-- Here are the JForm Field defs --></config>
 		</module>
 		<module>

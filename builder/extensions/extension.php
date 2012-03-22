@@ -52,6 +52,11 @@ class JBuilderExtension
 		return strtolower(str_replace('JBuilder', '', get_class($this)));
 	}
 	
+	/**
+	 * Check if all necessary options have been set and
+	 * then create the necessary build folder, setting 
+	 * $this->buildfolder to the correct location
+	 */
 	public function check()
 	{
 		if(!$this->joomlafolder) {
@@ -59,8 +64,22 @@ class JBuilderExtension
 		}
 		if(!$this->buildfolder){
 			$this->out('[notice] No buildfolder given, using '.$this->joomlafolder.'.build/');
-			$this->buildfolder = $this->joomlafolder;
+			$this->buildfolder = $this->joomlafolder.'.build/';
 		}
+		
+		$requiredOptions = array('name', 'author', 'copyright', 'license', 'email', 'website', 'version');
+		
+		$missing = array_diff($requiredOptions, array_keys($this->options));
+		if(count($missing) > 0) {
+			$this->out('['.$this->name.'] ERROR: The following basic options are missing: '.implode(', ', $missing));
+			throw new Exception('*FATAL ERROR* Missing options!');
+		}
+		
+		$this->buildfolder .= $this->getType().'/'.$this->name.'/';
+		if(!JFolder::create($this->buildfolder)) {
+			throw new Exception('*FATAL ERROR* Couldn\'t create build folder! '.$this->buildfolder);
+		}
+		
 		return true;
 	}
 	
@@ -91,7 +110,7 @@ class JBuilderExtension
 	{
 		$clients = (array) $clients;
 		$this->out('['.$this->name.'] Processing language files');
-		$paths = array('site' => ($this->joomlafolder.'language/'), 'admin' => ($this->joomlafolder.'administrator/language/'));
+		$paths = array('site' => ($this->joomlafolder.'language/'), 'administrator' => ($this->joomlafolder.'administrator/language/'));
 		foreach($clients as $client) {
 			$lang = array();
 			if(count($clients) > 1)
@@ -142,7 +161,9 @@ class JBuilderExtension
 			$f['data'] = file_get_contents($file);
 			$file = $f;
 		}
-		$adapter->create($this->buildfolder.$this->name.'.zip', $files);
+		$packagefolder = implode(DS, array_slice(explode(DS, $path),0, -2));
+		$adapter->create($packagefolder.'/'.$this->name.'.v'.$this->options['version'].'.zip', $files);
+		$this->out($packagefolder.$this->name.'.'.$this->options['version'].'.zip');
 	}
 	
 	/**

@@ -8,6 +8,12 @@ class JBuilderFile extends JBuilderExtension
 
 	public function check()
 	{
+		$requiredOptions = array('files');
+		$missing = array_diff($requiredOptions, array_keys($this->options));
+		if(count($missing) > 0) {
+			$this->out('['.$this->name.'] ERROR: The following basic options are missing: '.implode(', ', $missing));
+			throw new Exception('*FATAL ERROR* Missing options!');
+		}
 		return parent::check();
 	}
 
@@ -17,7 +23,7 @@ class JBuilderFile extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' FILE EXTENSION...');
 		$this->out(str_repeat('-', 79));
 		
-		$this->prepareLanguageFiles(array('site', 'admin'));
+		$this->prepareLanguageFiles(array('site', 'administrator'));
 		
 		$this->addIndexFiles();
 		

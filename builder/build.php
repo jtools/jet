@@ -98,9 +98,9 @@ class JoomlaExtensionBuilder extends JCli
 
 		if($common = $xml->xpath('common'))
 		{
-			$allowedGlobalOptions = array('copyright', 'version', 'email', 'website', 'author');
+			$allowedGlobalOptions = array('name', 'type', 'client');
 			foreach($common[0]->children() as $option) {
-				if(in_array($option->getName(), $allowedGlobalOptions)) {
+				if(!in_array($option->getName(), $allowedGlobalOptions)) {
 					$this->options[$option->getName()] = (string) $option;
 				}
 				if($option->getName() == 'joomla' && !$this->joomlafolder && is_dir((string) $option)) {
@@ -156,7 +156,7 @@ class JoomlaExtensionBuilder extends JCli
 				$adapter = JBuilderExtension::getInstance($type, $opts);
 				
 				$adapter->set('joomlafolder', $this->joomlafolder);
-				$adapter->set('buildfolder', $this->buildfolder.$type.'/'.$opts['name'].'/');
+				$adapter->set('buildfolder', $this->buildfolder);
 
 				$this->extensions[] = $adapter;
 			}
@@ -217,7 +217,6 @@ class JoomlaExtensionBuilder extends JCli
 		{
 			JFolder::create($this->buildfolder.$type.'/');
 		}
-		$extension->set('buildfolder', $this->buildfolder.$type.'/'.$extension->get('name').'/');
 		return true;
 	}
 	

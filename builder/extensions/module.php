@@ -8,25 +8,12 @@ class JBuilderModule extends JBuilderExtension
 	
 	public function check()
 	{
-		/**
-		 * 	<!--
-	The following properties have to be defined for a module to build successfully:
-	  - Module name (module.name) "mod_menu"
-	  - Client (module.client) "site" or "admin"
-	  - Copyright Statement (module.copyright) "(C) 2005 - 2011 Open Source Matters. All rights reserved."
-	  - Version (module.version) "2.5.0"
-	  - Author (project.author) "Joomla! Project"
-	  - Author E-Mail (project.email) "admin@joomla.org"
-	  - Author Website (project.website) "http://www.joomla.org"
-	  - Joomla Folder (project.joomla-folder) "/var/www"
-	Optional properties: (If not given, the shown defaults will be used)
-	  - Build Folder (project.build-folder) "/var/www/.build" (default: ${project.joomla-folder}/.build)  
-	  - License (project.license) "GNU General Public License version 2 or later; see LICENSE.txt" (default: GNU General Public License version 2 or later; see LICENSE.txt)
-	  - Updatesite (module.update) "http://example.com/collection.xml" (default: none)
-	These properties can be set in a properties file or handed in via a batch build. See component.properties for an example.
-	-->
-
-		 */
+		$requiredOptions = array('client');
+		$missing = array_diff($requiredOptions, array_keys($this->options));
+		if(count($missing) > 0) {
+			$this->out('['.$this->name.'] ERROR: The following basic options are missing: '.implode(', ', $missing));
+			throw new Exception('*FATAL ERROR* Missing options!');
+		}
 		return parent::check();;
 	}
 
@@ -66,6 +53,7 @@ class JBuilderModule extends JBuilderExtension
 		$manifest = new JBuilderHelperManifest();
 		
 		$manifest = $this->setManifestData($manifest);
+		$manifest->setClient($this->options['client']);
 		
 		//Here the missing options have to be set
 

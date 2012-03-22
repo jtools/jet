@@ -464,14 +464,14 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildModule($root)
 	{
-			$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
+		$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
 		{
 			//Handle media file section
 			if(is_dir($this->buildfolder.'/language/')) {
-				$mediafiles = $this->dom->createElement('media');
+				$mediafiles = $this->dom->createElement('language');
 				$mediafiles->setAttribute('destination', $this->extname);
-				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
+				$mediafiles = $this->filelist($this->buildfolder.'/language/', $mediafiles);
 				$root->appendChild($mediafiles);
 			}
 		}
@@ -532,6 +532,9 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 
 	private function filelist($folder, $dom)
 	{
+		if(!is_dir($folder)) {
+			return;
+		}
 		$dir = opendir($folder);
 		while(false !== ($entry = readdir($dir))) {
 			$e = null;

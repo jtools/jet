@@ -1,13 +1,28 @@
 <?php
 class JBuilderLibrary extends JBuilderExtension
 {
+	/**
+	 * Provide a list of all options that can be used by this Extension type
+	 */
 	static function getOptions()
 	{
-		return parent::getOptions();
+		return array_merge(parent::getOptions(), array('files'));
 	}
 	
+	/**
+	 * Check if all necessary options have been set and
+	 * then create the necessary build folder, setting 
+	 * $this->buildfolder to the correct location
+	 */
 	public function check()
 	{
+		$requiredOptions = array('files');
+		$missing = array_diff($requiredOptions, array_keys($this->options));
+		if(count($missing) > 0) {
+			$this->out('['.$this->name.'] ERROR: The following basic options are missing: '.implode(', ', $missing));
+			throw new Exception('*FATAL ERROR* Missing options!');
+		}
+		
 		return parent::check();
 	}
 
@@ -17,9 +32,11 @@ class JBuilderLibrary extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' LIBRARY...');
 		$this->out(str_repeat('-', 79));
 		
+		//
+		
 		$this->prepareMediaFiles();
 		
-		$this->prepareLanguageFiles(array('site', 'admin'));
+		$this->prepareLanguageFiles(array('site', 'administrator'));
 		
 		$this->addIndexFiles();
 		

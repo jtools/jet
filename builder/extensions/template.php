@@ -10,6 +10,13 @@ class JBuilderTemplate extends JBuilderExtension
 	
 	public function check()
 	{
+		$requiredOptions = array('client');
+		$missing = array_diff($requiredOptions, array_keys($this->options));
+		if(count($missing) > 0) {
+			$this->out('['.$this->name.'] ERROR: The following basic options are missing: '.implode(', ', $missing));
+			throw new Exception('*FATAL ERROR* Missing options!');
+		}
+		
 		return parent::check();
 	}
 
