@@ -48,7 +48,7 @@ class JoomlaExtensionBuilder extends JCli
 		}
 		
 		$types = array();
-		
+		define('JPATH_BUILDFOLDER', $this->buildfolder);
 		foreach($this->extensions as $extension) {
 			$folder = $this->isFolderPrepared($extension->getType(), $extension);
 			try {
@@ -199,16 +199,17 @@ class JoomlaExtensionBuilder extends JCli
 		if($this->buildfolder) {
 			if(is_dir($this->buildfolder)){
 				$this->out('[info] Using '.$this->buildfolder.' for building');
+				define('JPATH_BUILDFOLDER', $this->buildfolder);
 			} else {
 				if(!JFolder::create($this->buildfolder)) {
 					$this->out('*FATAL ERROR* Given folder for building is not reachable!');
 					$this->close(1);
 				} else {
 					$this->out('[info] Creating '.$this->buildfolder.' for building');
+					define('JPATH_BUILDFOLDER', $this->buildfolder);
 				}
 			}
 		}
-		
 	}
 	
 	protected function isFolderPrepared($type, $extension)

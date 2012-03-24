@@ -161,9 +161,7 @@ class JBuilderExtension
 			$f['data'] = file_get_contents($file);
 			$file = $f;
 		}
-		$packagefolder = implode(DS, array_slice(explode(DS, $path),0, -2));
-		$adapter->create($packagefolder.'/'.$this->name.'.v'.$this->options['version'].'.zip', $files);
-		$this->out($packagefolder.$this->name.'.'.$this->options['version'].'.zip');
+		$adapter->create(JPATH_BUILDFOLDER.'/'.$this->name.'.v'.$this->options['version'].'.zip', $files);
 	}
 	
 	/**

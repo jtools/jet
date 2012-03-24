@@ -38,7 +38,7 @@ class JBuilderPlugin extends JBuilderExtension
 		//Here the missing options have to be set
 
 		//Here we should save the manifest file to the disk
-		$this->out($manifest->main());
+		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
 		
 		$this->createPackage();
 		

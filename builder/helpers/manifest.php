@@ -104,7 +104,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	{
 		$types = array('component', 'file', 'language', 'library', 'module', 'package', 'plugin', 'template');
 		$this->checkAttributes();
-		$this->log('Creating manifest file for '.$this->extname);
+		$this->log('['.$this->extname.'] Creating manifest file for '.$this->extname);
 		$this->dom = new DOMDocument();
 		$this->dom->encoding = 'utf-8';//set the document encoding
 		$this->dom->xmlVersion = '1.0';//set xml version
