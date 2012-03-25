@@ -87,6 +87,10 @@ class JBuilderExtension
 	{
 		$manifest->setType($this->getType());
 		$manifest->setAuthor($this->options['author']);
+		$manifest->setEmail($this->options['email']);
+		$manifest->setLicense($this->options['license']);
+		$manifest->setCopyright($this->options['copyright']);
+		$manifest->setWebsite($this->options['website']);
 		$manifest->setExtName($this->name);
 		$manifest->setBuildFolder($this->buildfolder);
 		$manifest->setVersion($this->options['version']);
@@ -146,6 +150,9 @@ class JBuilderExtension
 	protected function addIndexFiles()
 	{
 		$this->out('['.$this->name.'] Adding index.html files');
+		$index = new JBuilderHelperIndexfiles(array('path' => $this->buildfolder, 'name' => $this->name));
+		$index->execute();
+		
 	}
 	
 	protected function createPackage()

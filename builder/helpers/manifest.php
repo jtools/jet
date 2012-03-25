@@ -406,7 +406,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 
 	private function buildFile($root)
 	{
-		$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
+		/**$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
 		{
 			//Handle media file section
@@ -416,7 +416,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
 				$root->appendChild($mediafiles);
 			}
-		}
+		}**/
 		
 		return $root;
 	}
@@ -447,7 +447,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildLibrary($root)
 	{
-			$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
+		/**	$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
 		{
 			//Handle media file section
@@ -457,14 +457,14 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
 				$root->appendChild($mediafiles);
 			}
-		}
+		}**/
 		
 		return $root;
 	}
 	
 	private function buildModule($root)
 	{
-		$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
+		/**$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
 		{
 			//Handle media file section
@@ -474,14 +474,14 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 				$mediafiles = $this->filelist($this->buildfolder.'/language/', $mediafiles);
 				$root->appendChild($mediafiles);
 			}
-		}
+		}**/
 		
 		return $root;
 	}
 	
 	private function buildPackage($root)
 	{
-			$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
+		/**	$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
 		{
 			//Handle media file section
@@ -491,31 +491,31 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
 				$root->appendChild($mediafiles);
 			}
-		}
+		}**/
 		
 		return $root;
 	}
 	
 	private function buildPlugin($root)
 	{
-			$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
+		/**$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
 		{
 			//Handle media file section
 			if(is_dir($this->buildfolder.'/language/')) {
-				$mediafiles = $this->dom->createElement('media');
+				$mediafiles = $this->dom->createElement('language');
 				$mediafiles->setAttribute('destination', $this->extname);
-				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
+				$mediafiles = $this->filelist($this->buildfolder.'/language/', $mediafiles);
 				$root->appendChild($mediafiles);
 			}
-		}
+		}**/
 		
 		return $root;		
 	}
 	
 	private function buildTemplate($root)
 	{
-			$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
+		/**	$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
 		{
 			//Handle media file section
@@ -525,7 +525,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
 				$root->appendChild($mediafiles);
 			}
-		}
+		}**/
 		
 		return $root;
 	}

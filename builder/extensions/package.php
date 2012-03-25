@@ -3,7 +3,7 @@ class JBuilderPackage extends JBuilderExtension
 {
 	static function getOptions()
 	{
-		return parent::getOptions();
+		return array_merge(parent::getOptions(), array('extensions'));
 	}
 	
 	public function check()
@@ -24,7 +24,7 @@ class JBuilderPackage extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' PACKAGE...');
 		$this->out(str_repeat('-', 79));
 		
-		$this->prepareLanguageFiles(array('admin'));
+		$this->prepareLanguageFiles(array('administrator'));
 		
 		$this->addIndexFiles();
 		

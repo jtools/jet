@@ -55,7 +55,7 @@
 	</modules>
 	<plugins>
 		<plugin>
-			<name>plg_debug</name>
+			<name>plg_system_debug</name>
 			<folder>system</folder>
 			<config><!-- Here are the JForm Field defs --></config>
 		</plugin>
@@ -63,7 +63,7 @@
 	<templates>
 		<template>
 			<name>beez</name>
-			<client>admin</client>
+			<client>site</client>
 			<config><!-- Here are the JForm Field defs --></config>
 		</template>
 	</templates>

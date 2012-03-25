@@ -47,6 +47,8 @@ class JoomlaExtensionBuilder extends JCli
 			$this->close(1);
 		}
 		
+		$this->cleanBuildFolder();
+		
 		$types = array();
 		define('JPATH_BUILDFOLDER', $this->buildfolder);
 		foreach($this->extensions as $extension) {
@@ -221,7 +223,25 @@ class JoomlaExtensionBuilder extends JCli
 		return true;
 	}
 	
-		/**
+	protected function cleanBuildFolder()
+	{
+		$this->out('Cleaning up the build folder...');
+		$folders = JFolder::folders($this->buildfolder, '.', false, true);
+		if(count($folders)) {
+			$count = 0;
+			foreach($folders as $folder) {
+				if(!JFolder::delete($folder)) {
+					throw new Exception('Folder '.$folder.' could not be deleted!');
+				}
+				$count++;
+			}
+			$this->out('Deleted '.$count.' folders');
+		} else {
+			$this->out('No folders to delete');
+		}
+	}
+	
+	/**
 	 * Write a string to standard output.
 	 *
 	 * @param   string   $text  The text to display.

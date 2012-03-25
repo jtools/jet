@@ -5,11 +5,16 @@ class JBuilderHelperIndexfiles extends JBuilderHelperBase {
 	public $path = null;
 	private $dir = null;
 	private $counter = 0;
+	private $name = null;
 
 	public function __construct($options)
 	{
 		if (isset($options['path'])) {
 			$this->path = $options['path'];
+		}
+		
+		if (isset($options['name'])) {
+			$this->name = $options['name'];
 		}
 	}
 	public function setPath($path)
@@ -27,7 +32,7 @@ class JBuilderHelperIndexfiles extends JBuilderHelperBase {
 		}
 
 		$this->readdir($this->path.'/');
-		$this->log('Added '.$this->counter.' index.html files to the project');
+		$this->log('['.$this->name.'] Added '.$this->counter.' index.html files to the project');
 	}
 
 	private function readdir($dir) {

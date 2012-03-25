@@ -5,7 +5,7 @@ class JBuilderTemplate extends JBuilderExtension
 	
 	static function getOptions()
 	{
-		return array_merge(parent::getOptions(), array('config'));
+		return array_merge(parent::getOptions(), array('config', 'client'));
 	}
 	
 	public function check()
@@ -37,6 +37,7 @@ class JBuilderTemplate extends JBuilderExtension
 		$manifest = $this->setManifestData($manifest);
 		
 		//Here the missing options have to be set
+		$manifest->setClient($this->options['client']);
 
 		//Here we should save the manifest file to the disk
 		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());

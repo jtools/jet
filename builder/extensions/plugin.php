@@ -5,7 +5,7 @@ class JBuilderPlugin extends JBuilderExtension
 	
 	static function getOptions()
 	{
-		return array_merge(parent::getOptions(), array('sql', 'config'));
+		return array_merge(parent::getOptions(), array('sql', 'config', 'folder'));
 	}
 	
 	public function check()
@@ -24,7 +24,7 @@ class JBuilderPlugin extends JBuilderExtension
 			$this->out('['.$this->name.'] Found frontend files');
 			JFolder::copy($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[0].'/', $this->buildfolder, '', true);
 		}
-		
+
 		$this->prepareMediaFiles();
 
 		$this->prepareLanguageFiles(array('administrator'));
@@ -36,6 +36,7 @@ class JBuilderPlugin extends JBuilderExtension
 		$manifest = $this->setManifestData($manifest);
 		
 		//Here the missing options have to be set
+		$manifest->setFolder($this->options['folder']);
 
 		//Here we should save the manifest file to the disk
 		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
