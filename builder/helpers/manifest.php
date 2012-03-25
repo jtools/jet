@@ -363,6 +363,12 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 						}
 					}
 				}
+				if(is_file($folder.$entry) && $entry != 'index.html') {
+					$tag = explode('.', $entry);
+					$e = $this->dom->createElement('language', 'language'.$add.'/'.$entry);
+					$e->setAttribute('tag', $tag[0]);
+					$lang->appendChild($e);
+				}
 			}
 			$root->appendChild($lang);
 		}
@@ -464,17 +470,13 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildModule($root)
 	{
-		/**$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
-		if(in_array($this->type, $languages)) 
-		{
-			//Handle media file section
-			if(is_dir($this->buildfolder.'/language/')) {
-				$mediafiles = $this->dom->createElement('language');
-				$mediafiles->setAttribute('destination', $this->extname);
-				$mediafiles = $this->filelist($this->buildfolder.'/language/', $mediafiles);
-				$root->appendChild($mediafiles);
-			}
-		}**/
+		$exclude = array('language', 'media');
+		//Handle file section
+		if(is_dir($this->buildfolder)) {
+			$files = $this->dom->createElement('files');
+			$files = $this->filelist($this->buildfolder, $files, $exclude);
+			$root->appendChild($files);
+		}
 		
 		return $root;
 	}
@@ -498,17 +500,13 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildPlugin($root)
 	{
-		/**$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
-		if(in_array($this->type, $languages)) 
-		{
-			//Handle media file section
-			if(is_dir($this->buildfolder.'/language/')) {
-				$mediafiles = $this->dom->createElement('language');
-				$mediafiles->setAttribute('destination', $this->extname);
-				$mediafiles = $this->filelist($this->buildfolder.'/language/', $mediafiles);
-				$root->appendChild($mediafiles);
-			}
-		}**/
+		$exclude = array('language', 'media');
+		//Handle file section
+		if(is_dir($this->buildfolder)) {
+			$files = $this->dom->createElement('files');
+			$files = $this->filelist($this->buildfolder, $files, $exclude);
+			$root->appendChild($files);
+		}
 		
 		return $root;		
 	}
@@ -530,7 +528,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 
-	private function filelist($folder, $dom)
+	private function filelist($folder, $dom, $exclude = array())
 	{
 		if(!is_dir($folder)) {
 			return;
@@ -538,6 +536,9 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		$dir = opendir($folder);
 		while(false !== ($entry = readdir($dir))) {
 			$e = null;
+			if(in_array($entry, $exclude)) {
+				continue;
+			}
 			if(is_file($folder.$entry)) {
 				$e = $this->dom->createElement('filename', $entry);
 			} elseif(is_dir($folder.$entry) && $entry != '.' && $entry != '..') {

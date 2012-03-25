@@ -20,9 +20,9 @@ class JBuilderPlugin extends JBuilderExtension
 		$this->out(str_repeat('-', 79));
 		
 		$parts = explode('_', $this->name, 3);
-		if(is_dir($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[0].'/')) {
+		if(is_dir($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[2].'/')) {
 			$this->out('['.$this->name.'] Found frontend files');
-			JFolder::copy($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[0].'/', $this->buildfolder, '', true);
+			JFolder::copy($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[2].'/', $this->buildfolder, '', true);
 		}
 
 		$this->prepareMediaFiles();
@@ -39,7 +39,7 @@ class JBuilderPlugin extends JBuilderExtension
 		$manifest->setFolder($this->options['folder']);
 
 		//Here we should save the manifest file to the disk
-		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
+		JFile::write($this->buildfolder.$parts[2].'.xml', $manifest->main());
 		
 		$this->createPackage();
 		

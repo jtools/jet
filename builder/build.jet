@@ -10,6 +10,7 @@
 		<email>admin@joomla.org</email>
 		<website>http://www.joomla.org</website>
 		<license>GPL</license>
+		<joomlaversion>2.5</joomlaversion>
 	</common>
 	<components>
 		<component>
@@ -56,6 +57,11 @@
 	<plugins>
 		<plugin>
 			<name>plg_system_debug</name>
+			<folder>system</folder>
+			<config><!-- Here are the JForm Field defs --></config>
+		</plugin>
+		<plugin>
+			<name>plg_system_highlight</name>
 			<folder>system</folder>
 			<config><!-- Here are the JForm Field defs --></config>
 		</plugin>

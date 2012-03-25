@@ -23,27 +23,13 @@ class JBuilderModule extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' MODULE...');
 		$this->out(str_repeat('-', 79));
 		
-/**
-		<if>
-			<equals arg1="${module.client}" arg2="site" />
-			<then>
-				<property name="module.folder" value="${project.joomla-folder}/modules/${module.name}" />
-			</then>
-			<else>
-				<property name="module.folder" value="${project.joomla-folder}/administrator/modules/${module.name}" />
-			</else>
-		</if>
-		<echo msg="Creating folder for the module." /> 
-		<mkdir dir="${project.build-folder}/modules/${module.client}/${module.name}" />
-		<echo msg="Copy the files for the module." />
-		<copy todir="${project.build-folder}/modules/${module.client}/${module.name}">
-			<fileset dir="${module.folder}">
-				<include name="**" />
-				<exclude name="${module.name}.xml" />
-			</fileset>
-		</copy>
-		<echo msg="----------------------------------------" />
-**/
+		$paths = array('site' => $this->joomlafolder.'modules/', 'administrator' => $this->joomlafolder.'administrator/modules/');
+		
+		if(is_dir($paths[$this->options['client']].$this->name.'/')) {
+			$this->out('['.$this->name.'] Found module files');
+			JFolder::copy($paths[$this->options['client']].$this->name.'/', $this->buildfolder, '', true);
+		}
+		
 		$this->prepareMediaFiles();
 		
 		$this->prepareLanguageFiles($this->options['client']);
@@ -58,7 +44,7 @@ class JBuilderModule extends JBuilderExtension
 		//Here the missing options have to be set
 
 		//Here we should save the manifest file to the disk
-		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
+		JFile::write($this->buildfolder.$this->name.'.xml', $manifest->main());
 	
 		$this->createPackage();
 		

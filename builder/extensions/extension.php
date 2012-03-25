@@ -34,7 +34,7 @@ class JBuilderExtension
 	
 	public static function getOptions()
 	{
-		return array('copyright', 'version', 'email', 'website','name');
+		return array('copyright', 'version', 'email', 'website','name', 'joomlaversion');
 	}
 	
 	public function __construct($options)
@@ -94,6 +94,7 @@ class JBuilderExtension
 		$manifest->setExtName($this->name);
 		$manifest->setBuildFolder($this->buildfolder);
 		$manifest->setVersion($this->options['version']);
+		$manifest->setJVersion($this->options['joomlaversion']);
 		return $manifest;
 	}
 	
