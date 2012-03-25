@@ -23,7 +23,7 @@ class JoomlaExtensionBuilder extends JCli
 	
 	protected $joomlafolder = null;
 	
-	public function execute()
+	protected function doExecute()
 	{
 		JLoader::discover('JBuilderHelper', JPATH_BASE.'/helpers/');
 		JLoader::discover('JBuilder', JPATH_BASE.'/extensions/');
@@ -255,9 +255,8 @@ class JoomlaExtensionBuilder extends JCli
 	public function out($text = '', $nl = true, $center = false)
 	{
 		if($center) $text = str_repeat(' ', (79 - strlen($text))/2).$text;
-		fwrite(STDOUT, $text . ($nl ? "\n" : null));
 
-		return $this;
+		return parent::out($text, $nl);
 	}
 }
 
