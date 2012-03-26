@@ -14,8 +14,90 @@
 	</common>
 	<components>
 		<component>
+			<name>com_admin</name>
+		</component>
+		<component>
+			<name>com_banners</name>
+			<sql>
+				<table>#__banners</table>
+				<table>#__banner_clients</table>
+				<table>#__banner_tracks</table>
+			</sql>
+		</component>
+		<component>
+			<name>com_cache</name>
+		</component>
+		<component>
+			<name>com_categories</name>
+		</component>
+		<component>
+			<name>com_checkin</name>
+		</component>
+		<component>
+			<name>com_config</name>
+		</component>
+		<component>
+			<name>com_contact</name>
+			<sql>
+				<table>#__contact_details</table>
+			</sql>
+		</component>
+		<component>
 			<name>com_content</name>
-			<version>2.8</version> <!-- Only necessary when you want to override the version from "common" -->
+			<version>2.8</version>
+			<sql>
+				<table>#__content</table>
+				<table>#__content_frontpage</table>
+				<table>#__content_rating</table>
+			</sql>
+		</component>
+		<component>
+			<name>com_cpanel</name>
+		</component>
+		<component>
+			<name>com_finder</name>
+		</component>
+		<component>
+			<name>com_installer</name>
+		</component>
+		<component>
+			<name>com_languages</name>
+		</component>
+		<component>
+			<name>com_login</name>
+		</component>
+		<component>
+			<name>com_media</name>
+		</component>
+		<component>
+			<name>com_menus</name>
+		</component>
+		<component>
+			<name>com_messages</name>
+		</component>
+		<component>
+			<name>com_modules</name>
+		</component>
+		<component>
+			<name>com_newsfeeds</name>
+		</component>
+		<component>
+			<name>com_plugins</name>
+		</component>
+		<component>
+			<name>com_redirect</name>
+		</component>
+		<component>
+			<name>com_search</name>
+		</component>
+		<component>
+			<name>com_templates</name>
+		</component>
+		<component>
+			<name>com_users</name>
+		</component>
+		<component>
+			<name>com_weblinks</name>
 		</component>
 	</components>
 	<files>
@@ -46,36 +128,36 @@
 		<module>
 			<name>mod_menu</name>
 			<client>administrator</client>
-			<config><!-- Here are the JForm Field defs --></config>
+			<config></config>
 		</module>
 		<module>
 			<name>mod_languages</name>
 			<client>site</client>
-			<config><!-- Here are the JForm Field defs --></config>
+			<config></config>
 		</module>
 	</modules>
 	<plugins>
 		<plugin>
 			<name>plg_system_debug</name>
 			<folder>system</folder>
-			<config><!-- Here are the JForm Field defs --></config>
+			<config></config>
 		</plugin>
 		<plugin>
 			<name>plg_system_highlight</name>
 			<folder>system</folder>
-			<config><!-- Here are the JForm Field defs --></config>
+			<config></config>
 		</plugin>
 	</plugins>
 	<templates>
 		<template>
 			<name>beez5</name>
 			<client>site</client>
-			<config><!-- Here are the JForm Field defs --></config>
+			<config></config>
 		</template>
 		<template>
 			<name>beez_20</name>
 			<client>site</client>
-			<config><!-- Here are the JForm Field defs --></config>
+			<config></config>
 		</template>
 	</templates>
 	<packages>

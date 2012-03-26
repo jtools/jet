@@ -9,6 +9,8 @@ class JBuilderExtension
 	
 	protected $joomlafolder = null;
 	
+	protected $sql = null;
+	
 	public static function getInstance($type, $options)
 	{
 		$types = array(
@@ -95,6 +97,13 @@ class JBuilderExtension
 		$manifest->setBuildFolder($this->buildfolder);
 		$manifest->setVersion($this->options['version']);
 		$manifest->setJVersion($this->options['joomlaversion']);
+		if($this->sql) {
+			$manifest->setSQL($this->sql);
+		}
+		if(isset($this->options['newSQL'])) {
+			$manifest->setOption('newSQL', true);
+		}
+		
 		return $manifest;
 	}
 	
@@ -145,7 +154,23 @@ class JBuilderExtension
 	
 	protected function prepareSQL()
 	{
+		if(!isset($this->options['sql'])) {
+			return;
+		}
 		$this->out('['.$this->name.'] Preparing database tables and sample content');
+		
+		$db = JFactory::getDBO();
+		$db->setQuery('SELECT * from #__banners');
+		$exporter = new JDatabaseExporterMySQL();
+		$exporter->setDbo($db);
+		$tables = array();
+		foreach($this->options['sql'] as $table) {
+			$tables[] = (string)$table;
+		}
+		
+		$exporter->from($tables);
+		
+		$this->sql = (string)$exporter;
 	}
 	
 	protected function addIndexFiles()

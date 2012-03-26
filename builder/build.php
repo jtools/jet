@@ -31,7 +31,7 @@ class JoomlaExtensionBuilder extends JApplicationCli
 		$this->out('JOOMLA! EXTENSION TOOLS',true,true);
 		$this->out('Extension Builder',true,true);
 		$this->out(str_repeat('=', 79));
-
+		
 		$this->loadPropertiesFromCLI();
 
 		if(count($this->input->args)) {
@@ -39,6 +39,8 @@ class JoomlaExtensionBuilder extends JApplicationCli
 		} else {
 			$this->loadPropertiesFromInput();
 		}
+		
+		$config = JFactory::getConfig($this->joomlafolder.'configuration.php');
 
 		if(!$this->joomlafolder) {
 			$this->out('*FATAL ERROR* No Joomla installation as build source given!');
@@ -138,8 +140,8 @@ class JoomlaExtensionBuilder extends JApplicationCli
 
 			$options = call_user_func(array('JBuilder'.$type, 'getOptions'));
 
-			$opts = $this->options;
 			foreach($extensions as $extension) {
+				$opts = $this->options;
 				foreach($extension->children() as $exopt) {
 					if(!in_array($exopt->getName(), $options)) {
 						continue;
@@ -194,6 +196,10 @@ class JoomlaExtensionBuilder extends JApplicationCli
 			$this->buildfolder = $this->input->get('b', null, 'STRING');
 		} elseif($this->input->get('build')) {
 			$this->buildfolder = $this->input->get('build', null, 'STRING');
+		}
+		
+		if($this->input->get('n')) {
+			$this->options['newSQL'] = true;
 		}
 
 		if($this->buildfolder) {

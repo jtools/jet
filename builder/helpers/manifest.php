@@ -2,6 +2,7 @@
 
 class JBuilderHelperManifest extends JBuilderHelperBase {
 
+	protected $options = array();
 	private $type = null;
 	private $extname = null;
 	private $exttitle = null;
@@ -18,6 +19,12 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	private $client = null;
 	private $tag = null;
 	private $dom = null;
+	private $sql = null;
+	
+	public function setOption($key, $value)
+	{
+		$this->options[$key] = $value;
+	}
 	
 	public function setType($type)
 	{
@@ -98,6 +105,11 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	public function setTag($tag)
 	{
 		$this->tag = $tag;
+	}
+	
+	public function setSQL($sql)
+	{
+		$this->sql = $sql;
 	}
 
 	public function main()
@@ -252,66 +264,80 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		if(!in_array($this->type, array('component', 'file', 'module', 'plugin')))
 			return $root;
 		
-		$path = $this->buildfolder;
-		if($this->type == 'component')
-			$path .= '/admin';
-			
-		if(is_dir($path.'/sql')) {
-			if(file_exists($path.'/sql/install.mysql.utf8.sql')) {
-				$install = $this->dom->createElement('install');
+		if(isset($this->options['newSQL'])) {
+			if($this->sql) {
+				$xml = simplexml_load_string($this->sql);
+				$tables = $xml->xpath('database');
+				$tables = $tables[0]->children();
 				$sql = $this->dom->createElement('sql');
-				$folder = $path.'/sql/';
-				$dir = opendir($folder);
-				while(false !== ($entry = readdir($dir))) {
-					if(is_file($folder.$entry) && substr($entry, 0, 7) == 'install') {
-						$data = explode('.', $entry);
-						$e = $this->dom->createElement('file', 'sql/'.$entry);
-						$e->setAttribute('charset', 'utf8');
-						$e->setAttribute('folder', 'sql');
-						$e->setAttribute('driver', $data[1]);
-						$sql->appendChild($e);
-					}
+				foreach($tables as $table) {
+					$temp = $this->dom->importNode(dom_import_simplexml($table), true);
+
+					$sql->appendChild($temp);
 				}
-				$install->appenChild($sql);
-				$root->appendChild($install);
+				$root->appendChild($sql);
 			}
+		} else {
+			$path = $this->buildfolder;
+			if($this->type == 'component')
+				$path .= '/admin';
 			
-			if(file_exists($path.'/sql/uninstall.mysql.utf8.sql')) {
-				$uninstall = $this->dom->createElement('uninstall');
-				$sql = $this->dom->createElement('sql');
-				$folder = $path.'/sql/';
-				$dir = opendir($folder);
-				while(false !== ($entry = readdir($dir))) {
-					if(is_file($folder.$entry) && substr($entry, 0, 9) == 'uninstall') {
-						$data = explode('.', $entry);
-						$e = $this->dom->createElement('file', 'sql/'.$entry);
-						$e->setAttribute('charset', 'utf8');
-						$e->setAttribute('folder', 'sql');
-						$e->setAttribute('driver', $data[1]);
-						$sql->appendChild($e);
+			if(is_dir($path.'/sql')) {
+				if(file_exists($path.'/sql/install.mysql.utf8.sql')) {
+					$install = $this->dom->createElement('install');
+					$sql = $this->dom->createElement('sql');
+					$folder = $path.'/sql/';
+					$dir = opendir($folder);
+					while(false !== ($entry = readdir($dir))) {
+						if(is_file($folder.$entry) && substr($entry, 0, 7) == 'install') {
+							$data = explode('.', $entry);
+							$e = $this->dom->createElement('file', 'sql/'.$entry);
+							$e->setAttribute('charset', 'utf8');
+							$e->setAttribute('folder', 'sql');
+							$e->setAttribute('driver', $data[1]);
+							$sql->appendChild($e);
+						}
 					}
+					$install->appendChild($sql);
+					$root->appendChild($install);
 				}
-				$uninstall->appendChild($sql);
-				$root->appendChild($uninstall);
-			}
 			
-			if(is_dir($path.'/sql/updates')) {
-				$update = $this->dom->createElement('update');
-				$schemas = $this->dom->createElement('schemas');
-				$folder = $path.'/sql/updates/';
-				$dir = opendir($folder);
-				while(false !== ($entry = readdir($dir))) {
-					if(is_dir($folder.$entry)) {
-						$e = $this->dom->createElement('schemapath', 'sql/updates/'.$entry);
-						$e->setAttribute('type', $entry);
-						$schemas->appendChild($e);
+				if(file_exists($path.'/sql/uninstall.mysql.utf8.sql')) {
+					$uninstall = $this->dom->createElement('uninstall');
+					$sql = $this->dom->createElement('sql');
+					$folder = $path.'/sql/';
+					$dir = opendir($folder);
+					while(false !== ($entry = readdir($dir))) {
+						if(is_file($folder.$entry) && substr($entry, 0, 9) == 'uninstall') {
+							$data = explode('.', $entry);
+							$e = $this->dom->createElement('file', 'sql/'.$entry);
+							$e->setAttribute('charset', 'utf8');
+							$e->setAttribute('folder', 'sql');
+							$e->setAttribute('driver', $data[1]);
+							$sql->appendChild($e);
+						}
 					}
+					$uninstall->appendChild($sql);
+					$root->appendChild($uninstall);
 				}
-				$update->appendChild($schemas);
-				$root->appendChild($update);
+			
+				if(is_dir($path.'/sql/updates')) {
+					$update = $this->dom->createElement('update');
+					$schemas = $this->dom->createElement('schemas');
+					$folder = $path.'/sql/updates/';
+					$dir = opendir($folder);
+					while(false !== ($entry = readdir($dir))) {
+						if(is_dir($folder.$entry)) {
+							$e = $this->dom->createElement('schemapath', 'sql/updates/'.$entry);
+							$e->setAttribute('type', $entry);
+							$schemas->appendChild($e);
+						}
+					}
+					$update->appendChild($schemas);
+					$root->appendChild($update);
+				}
 			}
 		}
-		
 		return $root;
 	}
 	
@@ -412,17 +438,13 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 
 	private function buildFile($root)
 	{
-		/**$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
-		if(in_array($this->type, $languages)) 
-		{
-			//Handle media file section
-			if(is_dir($this->buildfolder.'/language/')) {
-				$mediafiles = $this->dom->createElement('media');
-				$mediafiles->setAttribute('destination', $this->extname);
-				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
-				$root->appendChild($mediafiles);
-			}
-		}**/
+		$exclude = array('language', 'media');
+		//Handle file section
+		if(is_dir($this->buildfolder)) {
+			$files = $this->dom->createElement('files');
+			$files = $this->filelist($this->buildfolder, $files, $exclude);
+			$root->appendChild($files);
+		}
 		
 		return $root;
 	}

@@ -23,6 +23,20 @@ class JBuilderFile extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' FILE EXTENSION...');
 		$this->out(str_repeat('-', 79));
 		
+		if($this->options['files']) {
+			foreach($this->options['files'] as $element) {
+				if($element->getName() == 'folder') {
+					if(is_dir($this->joomlafolder.(string)$element)) {
+						JFolder::copy($this->joomlafolder.(string)$element, $this->buildfolder.$element, '', true);
+					}
+				} elseif($element->getName() == 'file') {
+					if(is_file($this->joomlafolder.(string)$element)) {
+						JFile::copy($this->joomlafolder.(string)$element, $this->buildfolder.(string)$element);
+					}
+				}
+			}
+		}
+		
 		$this->prepareLanguageFiles(array('site', 'administrator'));
 		
 		$this->addIndexFiles();

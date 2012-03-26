@@ -35,7 +35,7 @@ class JBuilderLibrary extends JBuilderExtension
 		if(is_dir($this->joomlafolder.'libraries/'.$this->name.'/')) {
 			$this->out('['.$this->name.'] Found library files');
 			JFolder::create($this->buildfolder.$this->name);
-			JFolder::copy($this->joomlafolder.'libraries/'.$this->name.'/', $this->buildfolder.$this->name, '', true);
+			JFolder::copy($this->joomlafolder.'libraries/'.$this->name.'/', $this->buildfolder, '', true);
 		}
 		
 		$this->prepareMediaFiles();
