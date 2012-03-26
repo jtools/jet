@@ -7,22 +7,20 @@ $GLOBALS['timer'] = explode(' ', microtime());
 
 require_once '../libraries/import.php';
 
-jimport('joomla.application.cli');
-
-class JoomlaExtensionBuilder extends JCli
+class JoomlaExtensionBuilder extends JApplicationCli
 {
 	protected $extensions = array();
-	
+
 	protected $types = array();
-	
+
 	protected $verbose = false;
-	
+
 	protected $options = array();
-	
+
 	protected $buildfolder = null;
-	
+
 	protected $joomlafolder = null;
-	
+
 	protected function doExecute()
 	{
 		JLoader::discover('JBuilderHelper', JPATH_BASE.'/helpers/');
@@ -35,20 +33,20 @@ class JoomlaExtensionBuilder extends JCli
 		$this->out(str_repeat('=', 79));
 
 		$this->loadPropertiesFromCLI();
-		
+
 		if(count($this->input->args)) {
 			$this->loadPropertiesFromFile($this->input->args[0]);
 		} else {
 			$this->loadPropertiesFromInput();
 		}
-		
+
 		if(!$this->joomlafolder) {
 			$this->out('*FATAL ERROR* No Joomla installation as build source given!');
 			$this->close(1);
 		}
-		
+
 		$this->cleanBuildFolder();
-		
+
 		$types = array();
 		define('JPATH_BUILDFOLDER', $this->buildfolder);
 		foreach($this->extensions as $extension) {
@@ -61,16 +59,16 @@ class JoomlaExtensionBuilder extends JCli
 				$this->close(1);
 			}
 		}
-		
+
 		$this->out('FINISHED!!');
 		$this->out('Statistics:');
 		foreach($types as $type => $count) {
 			$this->out($type.': '.$count);
 		}
-		
-		$time = explode(' ', microtime());		
+
+		$time = explode(' ', microtime());
 		$this->out('Time elapsed: '.(($time[0] - $GLOBALS['timer'][0]) + (float) ($time[1] - $GLOBALS['timer'][1])));
-		
+
 		$this->close(0);
 	}
 
@@ -85,14 +83,14 @@ class JoomlaExtensionBuilder extends JCli
 			$this->close(1);
 		}
 		$this->out('[config] Reading config data from '.$path);
-		
+
 		$xml = JFactory::getXML($path, true);
-		
+
 		if(!$xml) {
 			$this->out('[config] Not a valid XML file');
 			$this->close(1);
 		}
-		
+
 		if($xml->getName() != 'jet') {
 			$this->out('[config] Not a valid JET file');
 			$this->close(1);
@@ -120,7 +118,7 @@ class JoomlaExtensionBuilder extends JCli
 				$this->out('[info] Using '.$this->buildfolder.' for building');
 			}
 		}
-		
+
 		$types = array(
 			'components' => 'component',
 			'files' => 'file',
@@ -137,16 +135,16 @@ class JoomlaExtensionBuilder extends JCli
 			if(count($extensions) == 0) {
 				continue;
 			}
-			
+
 			$options = call_user_func(array('JBuilder'.$type, 'getOptions'));
-			
+
 			$opts = $this->options;
 			foreach($extensions as $extension) {
 				foreach($extension->children() as $exopt) {
 					if(!in_array($exopt->getName(), $options)) {
 						continue;
 					}
-					
+
 					if($exopt->count()) {
 						$opts[$exopt->getName()] = $exopt->children();
 					} elseif(count($exopt->attributes())) {
@@ -156,7 +154,7 @@ class JoomlaExtensionBuilder extends JCli
 					}
 				}
 				$adapter = JBuilderExtension::getInstance($type, $opts);
-				
+
 				$adapter->set('joomlafolder', $this->joomlafolder);
 				$adapter->set('buildfolder', $this->buildfolder);
 
@@ -177,7 +175,7 @@ class JoomlaExtensionBuilder extends JCli
 			$this->verbose = true;
 			$this->out('[config] verbose mode enabled');
 		}
-		
+
 		if($this->input->get('j')) {
 			$this->joomlafolder = $this->input->get('j', null, 'STRING');
 		} elseif($this->input->get('joomla')) {
@@ -191,13 +189,13 @@ class JoomlaExtensionBuilder extends JCli
 				$this->close(1);
 			}
 		}
-		
+
 		if($this->input->get('b')) {
 			$this->buildfolder = $this->input->get('b', null, 'STRING');
 		} elseif($this->input->get('build')) {
 			$this->buildfolder = $this->input->get('build', null, 'STRING');
 		}
-		
+
 		if($this->buildfolder) {
 			if(is_dir($this->buildfolder)){
 				$this->out('[info] Using '.$this->buildfolder.' for building');
@@ -213,7 +211,7 @@ class JoomlaExtensionBuilder extends JCli
 			}
 		}
 	}
-	
+
 	protected function isFolderPrepared($type, $extension)
 	{
 		if(!is_dir($this->buildfolder.$type.'/'))
@@ -222,7 +220,7 @@ class JoomlaExtensionBuilder extends JCli
 		}
 		return true;
 	}
-	
+
 	protected function cleanBuildFolder()
 	{
 		$this->out('Cleaning up the build folder...');
@@ -240,7 +238,7 @@ class JoomlaExtensionBuilder extends JCli
 			$this->out('No folders to delete');
 		}
 	}
-	
+
 	/**
 	 * Write a string to standard output.
 	 *
@@ -260,4 +258,4 @@ class JoomlaExtensionBuilder extends JCli
 	}
 }
 
-JCli::getInstance('JoomlaExtensionBuilder')->execute();
+JApplicationCli::getInstance('JoomlaExtensionBuilder')->execute();
