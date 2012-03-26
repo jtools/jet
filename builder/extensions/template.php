@@ -26,6 +26,11 @@ class JBuilderTemplate extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' TEMPLATE...');
 		$this->out(str_repeat('-', 79));
 		
+		if(is_dir($this->joomlafolder.'templates/'.$this->name.'/')) {
+			$this->out('['.$this->name.'] Found template files');
+			JFolder::copy($this->joomlafolder.'templates/'.$this->name.'/', $this->buildfolder, '', true);
+		}
+		
 		$this->prepareMediaFiles();
 		
 		$this->prepareLanguageFiles(array($this->client));

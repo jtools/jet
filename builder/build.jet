@@ -68,14 +68,19 @@
 	</plugins>
 	<templates>
 		<template>
-			<name>beez</name>
+			<name>beez5</name>
+			<client>site</client>
+			<config><!-- Here are the JForm Field defs --></config>
+		</template>
+		<template>
+			<name>beez_20</name>
 			<client>site</client>
 			<config><!-- Here are the JForm Field defs --></config>
 		</template>
 	</templates>
 	<packages>
 		<package>
-			<name>Joomla</name>
+			<name>Joomla1</name>
 			<extensions>
 				<extension type="component">com_content</extension>
 			</extensions>

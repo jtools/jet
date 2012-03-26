@@ -32,7 +32,11 @@ class JBuilderLibrary extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' LIBRARY...');
 		$this->out(str_repeat('-', 79));
 		
-		//
+		if(is_dir($this->joomlafolder.'libraries/'.$this->name.'/')) {
+			$this->out('['.$this->name.'] Found library files');
+			JFolder::create($this->buildfolder.$this->name);
+			JFolder::copy($this->joomlafolder.'libraries/'.$this->name.'/', $this->buildfolder.$this->name, '', true);
+		}
 		
 		$this->prepareMediaFiles();
 		
@@ -47,7 +51,7 @@ class JBuilderLibrary extends JBuilderExtension
 		//Here the missing options have to be set
 
 		//Here we should save the manifest file to the disk
-		//$this->out($manifest->main());
+		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
 		
 		$this->createPackage();
 		
