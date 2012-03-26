@@ -327,6 +327,9 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 					$folder = $path.'/sql/updates/';
 					$dir = opendir($folder);
 					while(false !== ($entry = readdir($dir))) {
+						if($entry == '.' || $entry == '..') {
+							continue;
+						}
 						if(is_dir($folder.$entry)) {
 							$e = $this->dom->createElement('schemapath', 'sql/updates/'.$entry);
 							$e->setAttribute('type', $entry);
@@ -371,19 +374,19 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		if($add == '' && $this->type == 'component')
 			$add = '/front';
 
-		if(is_dir($this->buildfolder.'/language'.$add)) {
+		if(is_dir($this->buildfolder.'/lang'.$add)) {
 			$lang = $this->dom->createElement('languages');
-			$folder = $this->buildfolder.'/language'.$add.'/';
+			$folder = $this->buildfolder.'/lang'.$add.'/';
 			$dir = opendir($folder);
 			while(false !== ($entry = readdir($dir))) {
 				if($entry == '.' || $entry == '..')
 					continue;
 				if(is_dir($folder.$entry)) {
-					$folder2 = $this->buildfolder.'/language'.$add.'/'.$entry.'/';
+					$folder2 = $this->buildfolder.'/lang'.$add.'/'.$entry.'/';
 					$dir2 = opendir($folder2);
 					while(false !== ($entry2 = readdir($dir2))) {
 						if(is_file($folder2.$entry2) && $entry2 != 'index.html') {
-							$e = $this->dom->createElement('language', 'language'.$add.'/'.$entry.'/'.$entry2);
+							$e = $this->dom->createElement('language', 'lang'.$add.'/'.$entry.'/'.$entry2);
 							$e->setAttribute('tag', $entry);
 							$lang->appendChild($e);
 						}
@@ -391,7 +394,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 				}
 				if(is_file($folder.$entry) && $entry != 'index.html') {
 					$tag = explode('.', $entry);
-					$e = $this->dom->createElement('language', 'language'.$add.'/'.$entry);
+					$e = $this->dom->createElement('language', 'lang'.$add.'/'.$entry);
 					$e->setAttribute('tag', $tag[0]);
 					$lang->appendChild($e);
 				}
@@ -494,6 +497,16 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 			$files = $this->dom->createElement('files');
 			$files = $this->filelist($this->buildfolder, $files, $exclude);
 			$root->appendChild($files);
+		}
+		
+		if(isset($this->options['config']) && is_object($this->options['config'])) {
+			$configs = $this->options['config']->children();
+			$config = $this->dom->createElement('config');
+			foreach($configs as $c) {
+				$temp = $this->dom->importNode(dom_import_simplexml($c), true);
+				$config->appendChild($temp);
+			}
+			$root->appendChild($config);
 		}
 		
 		return $root;

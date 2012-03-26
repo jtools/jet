@@ -148,7 +148,7 @@ class JoomlaExtensionBuilder extends JApplicationCli
 					}
 
 					if($exopt->count()) {
-						$opts[$exopt->getName()] = $exopt->children();
+						$opts[$exopt->getName()] = $exopt;
 					} elseif(count($exopt->attributes())) {
 						$opts[$exopt->getName()] = $exopt->attributes();
 					} else {

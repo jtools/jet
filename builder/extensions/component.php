@@ -17,21 +17,25 @@ class JBuilderComponent extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' COMPONENT...');
 		$this->out(str_repeat('-', 79));
 		
+		$clients = array();
+		
 		if(is_dir($this->joomlafolder.'administrator/components/'.$this->name.'/')) {
 			$this->out('['.$this->name.'] Found administrator files');
 			JFolder::create($this->buildfolder.'admin');
 			JFolder::copy($this->joomlafolder.'administrator/components/'.$this->name.'/', $this->buildfolder.'admin', '', true);
+			$clients[] = 'administrator';
 		}
 		
 		if(is_dir($this->joomlafolder.'components/'.$this->name.'/')) {
 			$this->out('['.$this->name.'] Found frontend files');
 			JFolder::create($this->buildfolder.'site');
 			JFolder::copy($this->joomlafolder.'components/'.$this->name.'/', $this->buildfolder.'site', '', true);
+			$clients[] = 'site';
 		}
 		
 		$this->prepareMediaFiles();
 		
-		$this->prepareLanguageFiles(array('site', 'administrator'));
+		$this->prepareLanguageFiles($clients);
 		
 		$this->prepareSQL();
 		

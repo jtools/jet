@@ -128,9 +128,9 @@ class JBuilderExtension
 		foreach($clients as $client) {
 			$lang = array();
 			if(count($clients) > 1)
-				$path = $this->buildfolder.'language/'.$client.'/';
+				$path = $this->buildfolder.'lang/'.$client.'/';
 			else
-				$path = $this->buildfolder.'language/';
+				$path = $this->buildfolder.'lang/';
 			JFolder::create($path);
 			foreach(JFolder::folders($paths[$client]) as $l) {
 				if($l == 'overrides') {

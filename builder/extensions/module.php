@@ -42,6 +42,9 @@ class JBuilderModule extends JBuilderExtension
 		$manifest->setClient($this->options['client']);
 		
 		//Here the missing options have to be set
+		if(isset($this->options['config'])) {
+			$manifest->setOption('config', $this->options['config']);
+		}
 
 		//Here we should save the manifest file to the disk
 		JFile::write($this->buildfolder.$this->name.'.xml', $manifest->main());
