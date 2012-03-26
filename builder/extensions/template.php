@@ -45,7 +45,7 @@ class JBuilderTemplate extends JBuilderExtension
 		$manifest->setClient($this->options['client']);
 
 		//Here we should save the manifest file to the disk
-		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
+		JFile::write($this->buildfolder.'templateDetails.xml', $manifest->main());
 		
 		$this->createPackage();
 		
