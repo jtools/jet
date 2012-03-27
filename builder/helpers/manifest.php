@@ -372,7 +372,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	private function createLanguage($root, $add = '')
 	{
 		if($add == '' && $this->type == 'component')
-			$add = '/front';
+			$add = '/site';
 
 		if(is_dir($this->buildfolder.'/lang'.$add)) {
 			$lang = $this->dom->createElement('languages');
@@ -410,10 +410,10 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	private function buildComponent($root)
 	{
 		//Handle frontend file section
-		if(is_dir($this->buildfolder.'/front/')) {
+		if(is_dir($this->buildfolder.'/site/')) {
 			$frontfiles = $this->dom->createElement('files');
-			$frontfiles->setAttribute('folder', 'front');
-			$frontfiles = $this->filelist($this->buildfolder.'/front/', $frontfiles);
+			$frontfiles->setAttribute('folder', 'site');
+			$frontfiles = $this->filelist($this->buildfolder.'/site/', $frontfiles);
 			$root->appendChild($frontfiles);
 		}
 		
@@ -433,6 +433,8 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 			
 			$admin->appendChild($menu);
 			
+			$admin = $this->createLanguage($admin, '/administrator');
+			
 			$root->appendChild($admin);
 		}
 		
@@ -441,7 +443,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 
 	private function buildFile($root)
 	{
-		$exclude = array('language', 'media');
+		$exclude = array('lang', 'media');
 		//Handle file section
 		if(is_dir($this->buildfolder)) {
 			$files = $this->dom->createElement('files');
@@ -478,7 +480,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildLibrary($root)
 	{
-		$exclude = array('language', 'media');
+		$exclude = array('lang', 'media');
 		//Handle file section
 		if(is_dir($this->buildfolder)) {
 			$files = $this->dom->createElement('files');
@@ -491,7 +493,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildModule($root)
 	{
-		$exclude = array('language', 'media');
+		$exclude = array('lang', 'media');
 		//Handle file section
 		if(is_dir($this->buildfolder)) {
 			$files = $this->dom->createElement('files');
@@ -531,12 +533,25 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildPlugin($root)
 	{
-		$exclude = array('language', 'media');
+		$exclude = array('lang', 'media');
+		$parts = explode('_', $this->extname, 3);
+		$added = false;
 		//Handle file section
 		if(is_dir($this->buildfolder)) {
 			$files = $this->dom->createElement('files');
 			$files = $this->filelist($this->buildfolder, $files, $exclude);
+			$files->firstChild->setAttribute('plugin', $parts[2]);
 			$root->appendChild($files);
+		}
+		
+		if(isset($this->options['config']) && is_object($this->options['config'])) {
+			$configs = $this->options['config']->children();
+			$config = $this->dom->createElement('config');
+			foreach($configs as $c) {
+				$temp = $this->dom->importNode(dom_import_simplexml($c), true);
+				$config->appendChild($temp);
+			}
+			$root->appendChild($config);
 		}
 		
 		return $root;		
@@ -544,7 +559,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	
 	private function buildTemplate($root)
 	{
-		$exclude = array('language', 'media');
+		$exclude = array('lang', 'media');
 		//Handle file section
 		if(is_dir($this->buildfolder)) {
 			$files = $this->dom->createElement('files');
@@ -560,6 +575,8 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		if(!is_dir($folder)) {
 			return;
 		}
+		$files = array();
+		$folders = array();
 		$dir = opendir($folder);
 		while(false !== ($entry = readdir($dir))) {
 			$e = null;
@@ -567,13 +584,24 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 				continue;
 			}
 			if(is_file($folder.$entry)) {
-				$e = $this->dom->createElement('filename', $entry);
+				$files[] = $entry;
 			} elseif(is_dir($folder.$entry) && $entry != '.' && $entry != '..') {
-				$e = $this->dom->createElement('folder', $entry);
+				$folders[] = $entry;
 			}
-			if(is_object($e))
-				$dom->appendChild($e);
 		}
+		sort($files);
+		sort($folders);
+		
+		foreach($files as $file) {
+			$e = $this->dom->createElement('file', $file);
+			$dom->appendChild($e);
+		}
+		
+		foreach($folders as $folder) {
+			$e = $this->dom->createElement('folder', $folder);
+			$dom->appendChild($e);
+		}
+		
 		return $dom;
 	}
 

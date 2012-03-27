@@ -37,7 +37,10 @@ class JBuilderPlugin extends JBuilderExtension
 		
 		//Here the missing options have to be set
 		$manifest->setFolder($this->options['folder']);
-
+		if(isset($this->options['config'])) {
+			$manifest->setOption('config', $this->options['config']);
+		}
+		
 		//Here we should save the manifest file to the disk
 		JFile::write($this->buildfolder.$parts[2].'.xml', $manifest->main());
 		
