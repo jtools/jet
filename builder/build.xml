@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jet>
 	<common>
-		<!-- These settings are merged into 
+			<!-- These settings are merged into 
 			every extension scope and get overwritten 
 			by the extension specific settings -->
 		<author>Joomla!</author>
@@ -14,27 +14,12 @@
 	</common>
 	<components>
 		<component>
-			<name>com_admin</name>
-		</component>
-		<component>
 			<name>com_banners</name>
 			<sql>
 				<table>#__banners</table>
 				<table>#__banner_clients</table>
 				<table>#__banner_tracks</table>
 			</sql>
-		</component>
-		<component>
-			<name>com_cache</name>
-		</component>
-		<component>
-			<name>com_categories</name>
-		</component>
-		<component>
-			<name>com_checkin</name>
-		</component>
-		<component>
-			<name>com_config</name>
 		</component>
 		<component>
 			<name>com_contact</name>
@@ -50,54 +35,6 @@
 				<table>#__content_frontpage</table>
 				<table>#__content_rating</table>
 			</sql>
-		</component>
-		<component>
-			<name>com_cpanel</name>
-		</component>
-		<component>
-			<name>com_finder</name>
-		</component>
-		<component>
-			<name>com_installer</name>
-		</component>
-		<component>
-			<name>com_languages</name>
-		</component>
-		<component>
-			<name>com_login</name>
-		</component>
-		<component>
-			<name>com_media</name>
-		</component>
-		<component>
-			<name>com_menus</name>
-		</component>
-		<component>
-			<name>com_messages</name>
-		</component>
-		<component>
-			<name>com_modules</name>
-		</component>
-		<component>
-			<name>com_newsfeeds</name>
-		</component>
-		<component>
-			<name>com_plugins</name>
-		</component>
-		<component>
-			<name>com_redirect</name>
-		</component>
-		<component>
-			<name>com_search</name>
-		</component>
-		<component>
-			<name>com_templates</name>
-		</component>
-		<component>
-			<name>com_users</name>
-		</component>
-		<component>
-			<name>com_weblinks</name>
 		</component>
 	</components>
 	<files>

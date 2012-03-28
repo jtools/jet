@@ -181,9 +181,12 @@ class JBuilderExtension
 		
 	}
 	
-	protected function createPackage()
+	protected function createPackage($filename = null)
 	{
 		$this->out('['.$this->name.'] Creating ZIP package');
+		if(!$filename) {
+			$filename = $this->name.'.v'.$this->options['version'].'.zip';
+		}
 		
 		$adapter = JArchive::getAdapter('zip');
 		
@@ -194,7 +197,7 @@ class JBuilderExtension
 			$f['data'] = file_get_contents($file);
 			$file = $f;
 		}
-		$adapter->create(JPATH_BUILDFOLDER.'/'.$this->name.'.v'.$this->options['version'].'.zip', $files);
+		$adapter->create(JPATH_BUILDFOLDER.'/'.$filename, $files);
 	}
 	
 	/**

@@ -47,7 +47,7 @@ class JBuilderTemplate extends JBuilderExtension
 		//Here we should save the manifest file to the disk
 		JFile::write($this->buildfolder.'templateDetails.xml', $manifest->main());
 		
-		$this->createPackage();
+		$this->createPackage('tpl_'.$this->name.'.'.$this->options['client'].'.v'.$this->options['version'].'.zip');
 		
 		$this->out(str_repeat('-', 79));
 		$this->out('TEMPLATE '.$this->options['name'].' HAS BEEN SUCCESSFULLY BUILD!');
