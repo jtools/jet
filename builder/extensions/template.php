@@ -5,7 +5,7 @@ class JBuilderTemplate extends JBuilderExtension
 	
 	static function getOptions()
 	{
-		return array_merge(parent::getOptions(), array('config', 'client'));
+		return array_merge(parent::getOptions(), array('config', 'client', 'positions'));
 	}
 	
 	public function check()
@@ -26,9 +26,14 @@ class JBuilderTemplate extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' TEMPLATE...');
 		$this->out(str_repeat('-', 79));
 		
-		if(is_dir($this->joomlafolder.'templates/'.$this->name.'/')) {
+		$paths = array(
+			'site' => $this->joomlafolder.'templates/',
+			'administrator' => $this->joomlafolder.'administrator/templates/'
+		);
+		
+		if(is_dir($paths[$this->options['client']].$this->name.'/')) {
 			$this->out('['.$this->name.'] Found template files');
-			JFolder::copy($this->joomlafolder.'templates/'.$this->name.'/', $this->buildfolder, '', true);
+			JFolder::copy($paths[$this->options['client']].$this->name.'/', $this->buildfolder, '', true);
 		}
 		
 		$this->prepareMediaFiles();
@@ -43,6 +48,9 @@ class JBuilderTemplate extends JBuilderExtension
 		
 		//Here the missing options have to be set
 		$manifest->setClient($this->options['client']);
+		if(isset($this->options['positions'])) {
+			$manifest->setOption('positions', $this->options['positions']);
+		}
 
 		//Here we should save the manifest file to the disk
 		JFile::write($this->buildfolder.'templateDetails.xml', $manifest->main());

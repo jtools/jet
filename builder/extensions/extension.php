@@ -77,7 +77,11 @@ class JBuilderExtension
 			throw new Exception('*FATAL ERROR* Missing options!');
 		}
 		
-		$this->buildfolder .= $this->getType().'/'.$this->name.'/';
+		if(is_dir($this->buildfolder.$this->getType().'/'.$this->name.'/')) {
+			$this->buildfolder .= $this->getType().'/'.$this->name.'.'.$this->options['client'].'/';
+		} else {
+			$this->buildfolder .= $this->getType().'/'.$this->name.'/';
+		}
 		if(!JFolder::create($this->buildfolder)) {
 			throw new Exception('*FATAL ERROR* Couldn\'t create build folder! '.$this->buildfolder);
 		}

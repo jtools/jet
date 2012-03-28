@@ -636,14 +636,33 @@
 	</plugins>
 	<templates>
 		<template>
-			<name>beez5</name>
+			<name>atomic</name>
 			<client>site</client>
-			<config></config>
 		</template>
 		<template>
 			<name>beez_20</name>
 			<client>site</client>
 			<config></config>
+		</template>
+		<template>
+			<name>beez5</name>
+			<client>site</client>
+		</template>
+		<template>
+			<name>system</name>
+			<client>site</client>
+		</template>
+		<template>
+			<name>bluestork</name>
+			<client>administrator</client>
+		</template>
+		<template>
+			<name>hathor</name>
+			<client>administrator</client>
+		</template>
+		<template>
+			<name>system</name>
+			<client>administrator</client>
 		</template>
 	</templates>
 	<packages>
