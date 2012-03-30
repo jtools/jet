@@ -129,28 +129,47 @@ class JBuilderExtension
 		$clients = (array) $clients;
 		$this->out('['.$this->name.'] Processing language files');
 		$paths = array('site' => ($this->joomlafolder.'language/'), 'administrator' => ($this->joomlafolder.'administrator/language/'));
+		
+		//Prepare list of available language files
+		$files = array();
+		$found = false;
 		foreach($clients as $client) {
-			$lang = array();
-			if(count($clients) > 1)
-				$path = $this->buildfolder.'lang/'.$client.'/';
-			else
-				$path = $this->buildfolder.'lang/';
-			JFolder::create($path);
+			$files[$client] = array();
 			foreach(JFolder::folders($paths[$client]) as $l) {
 				if($l == 'overrides') {
 					continue;
 				}
-				$lang[] = $l;
-			}
-			$this->out('['.$this->name.'] These languages were found for \''.$client.'\': '.implode(', ',$lang));
-			foreach($lang as $l) {
+				$files[$client][$l] = array();
 				foreach(JFolder::files($paths[$client].$l.'/', $l.'.'.$this->name.'.*') as $file) {
-					try {
-						JFile::copy($paths[$client].$l.'/'.$file, $path.$file);
-					} catch(Exception $e) {
-						//throw error
+					$files[$client][$l][$file] = $paths[$client].$l.'/'.$file;
+					$found = true;
+				}
+				if(!count($files[$client][$l])) {
+					unset($files[$client][$l]);
+				}
+			}
+			if(!count($files[$client])) {
+				unset($files[$client]);
+			}
+		}
+		if($found) {
+			JFolder::create($this->buildfolder.'lang/');
+			foreach($files as $client => $langs) {
+				if(count($files) > 1) {
+					$path = $this->buildfolder.'lang/'.$client.'/';
+				} else {
+					$path = $this->buildfolder.'lang/';
+				}
+				JFolder::create($path);
+				foreach($langs as $lang => $files) {
+					$this->out('['.$this->name.'] Found '.count($files).' files for "'.$client.'" client and language '.$lang);
+					foreach($files as $file => $filepath) {
+						try {
+							JFile::copy($filepath, $path.$file);
+						} catch(Exception $e) {
+							//throw error
+						}
 					}
-					$this->out('['.$this->name.'] Discovered '.$file);
 				}
 			}
 		}

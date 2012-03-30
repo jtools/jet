@@ -145,21 +145,82 @@
 			<files>
 				<file>index.php</file>
 				<folder>includes</folder>
+				<folder>cache</folder>
+				<folder>logs</folder>
+				<folder>tmp</folder>
+			</files>
+		</file>
+		<file>
+			<name>administrator-application</name>
+			<files>
+				<file>administrator/index.php</file>
+				<folder>administrator/includes</folder>
+				<folder>administrator/cache</folder>
+			</files>
+		</file>
+		<file>
+			<name>cms-cli-application</name>
+			<files>
+				<folder>cli</folder>
+			</files>
+		</file>
+		<file>
+			<name>cms-demo-images</name>
+			<files>
+				<folder>images</folder>
 			</files>
 		</file>
 	</files>
 	<languages>
 		<language>
 			<name>en-GB</name>
-			<client>admin</client>
+			<client>administrator</client>
+			<tag>en-GB</tag>
+		</language>
+		<language>
+			<name>en-GB</name>
+			<client>site</client>
+			<tag>en-GB</tag>
+		</language>
+		<language>
+			<name>en-GB</name>
+			<client>both</client>
 			<tag>en-GB</tag>
 		</language>
 	</languages>
 	<libraries>
 		<library>
+			<name>cms</name>
+			<files>
+				<folder>cms</folder>
+				<file>cms.php</file>
+			</files>
+		</library>
+		<library>
 			<name>joomla</name>
 			<files>
 				<folder>joomla</folder>
+				<file>import.php</file>
+				<file>loader.php</file>
+				<file>platform.php</file>
+			</files>
+		</library>
+		<library>
+			<name>phpmailer</name>
+			<files>
+				<folder>phpmailer</folder>
+			</files>
+		</library>
+		<library>
+			<name>phputf8</name>
+			<files>
+				<folder>phputf8</folder>
+			</files>
+		</library>
+		<library>
+			<name>simplepie</name>
+			<files>
+				<folder>simplepie</folder>
 			</files>
 		</library>
 	</libraries>
