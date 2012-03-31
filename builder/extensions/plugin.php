@@ -23,6 +23,10 @@ class JBuilderPlugin extends JBuilderExtension
 		if(is_dir($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[2].'/')) {
 			$this->out('['.$this->name.'] Found frontend files');
 			JFolder::copy($this->joomlafolder.'plugins/'.$parts[1].'/'.$parts[2].'/', $this->buildfolder, '', true);
+			$this->out('['.$this->name.'] Creating MD5SUM file');
+			$md5 = new JBuilderHelperMd5();
+			$md5->setBuildFolder($this->buildfolder);
+			$md5->build();
 		}
 
 		$this->prepareMediaFiles();

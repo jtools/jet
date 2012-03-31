@@ -24,6 +24,10 @@ class JBuilderComponent extends JBuilderExtension
 			JFolder::create($this->buildfolder.'admin');
 			JFolder::copy($this->joomlafolder.'administrator/components/'.$this->name.'/', $this->buildfolder.'admin', '', true);
 			$clients[] = 'administrator';
+			$this->out('['.$this->name.'] Creating MD5SUM file for administrator');
+			$md5admin = new JBuilderHelperMd5();
+			$md5admin->setBuildFolder($this->buildfolder.'admin/');
+			$md5admin->build();
 		}
 		
 		if(is_dir($this->joomlafolder.'components/'.$this->name.'/')) {
@@ -31,6 +35,10 @@ class JBuilderComponent extends JBuilderExtension
 			JFolder::create($this->buildfolder.'site');
 			JFolder::copy($this->joomlafolder.'components/'.$this->name.'/', $this->buildfolder.'site', '', true);
 			$clients[] = 'site';
+			$this->out('['.$this->name.'] Creating MD5SUM file for site');
+			$md5site = new JBuilderHelperMd5();
+			$md5site->setBuildFolder($this->buildfolder.'site/');
+			$md5site->build();
 		}
 		
 		$this->prepareMediaFiles();

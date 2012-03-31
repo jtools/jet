@@ -28,6 +28,10 @@ class JBuilderModule extends JBuilderExtension
 		if(is_dir($paths[$this->options['client']].$this->name.'/')) {
 			$this->out('['.$this->name.'] Found module files');
 			JFolder::copy($paths[$this->options['client']].$this->name.'/', $this->buildfolder, '', true);
+			$this->out('['.$this->name.'] Creating MD5SUM file');
+			$md5 = new JBuilderHelperMd5();
+			$md5->setBuildFolder($this->buildfolder);
+			$md5->build();
 		}
 		
 		$this->prepareMediaFiles();

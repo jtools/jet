@@ -36,6 +36,10 @@ class JBuilderLibrary extends JBuilderExtension
 			$this->out('['.$this->name.'] Found library files');
 			JFolder::create($this->buildfolder.$this->name);
 			JFolder::copy($this->joomlafolder.'libraries/'.$this->name.'/', $this->buildfolder, '', true);
+			$this->out('['.$this->name.'] Creating MD5SUM file');
+			$md5 = new JBuilderHelperMd5();
+			$md5->setBuildFolder($this->buildfolder);
+			$md5->build();
 		}
 		
 		$this->prepareMediaFiles();
@@ -53,7 +57,7 @@ class JBuilderLibrary extends JBuilderExtension
 		//Here we should save the manifest file to the disk
 		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
 		
-		$this->createPackage();
+		$this->createPackage('lib_'.$this->name.'.v'.$this->options['version'].'.zip');
 		
 		$this->out(str_repeat('-', 79));
 		$this->out('LIBRARY '.$this->options['name'].' HAS BEEN SUCCESSFULLY BUILD!');

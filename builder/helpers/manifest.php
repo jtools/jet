@@ -470,7 +470,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 			$admin = $this->dom->createElement('administration');
 			$adminfiles = $this->dom->createElement('files');
 			$adminfiles->setAttribute('folder', 'admin');
-			$adminfiles = $this->filelist($this->buildfolder.'/admin/', $adminfiles);
+			$adminfiles = $this->filelist($this->buildfolder.'/administrator/', $adminfiles);
 			$admin->appendChild($adminfiles);
 			$root->appendChild($admin);			
 		}
