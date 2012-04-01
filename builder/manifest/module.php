@@ -1,6 +1,16 @@
 <?php
 class JBuilderManifestModule extends JBuilderManifestBase
 {
+	protected function checkAttributes()
+	{
+		parent::checkAttributes();
+		
+		$clients = array('site', 'administrator');
+		if (!isset($this->client) || !in_array($this->client, $clients)) {
+			throw new Exception("Missing attribute 'client' or client not valid");
+		}
+	}
+	
 	public function build()
 	{
 		$this->checkAttributes();

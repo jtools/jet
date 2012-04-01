@@ -16,7 +16,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	protected $license = null;
 	protected $update = null;
 	protected $client = null;
-	protected $tag = null;
 	protected $dom = null;
 	protected $sql = null;
 	
@@ -393,16 +392,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		
 		if (!isset($this->version)) {
 			throw new Exception("Missing attribute 'version'");
-		}
-		
-		if ($this->type == 'plugin' && !isset($this->folder)) {
-			throw new Exception("Missing attribute 'folder'");
-		}
-		
-		$types = array('module', 'template', 'language');
-		$clients = array('site', 'administrator', 'both');
-		if (in_array($this->type, $types) && (!isset($this->client) || !in_array($this->client, $clients))) {
-			throw new Exception("Missing attribute 'client' or client not valid");
 		}
 	}
 }

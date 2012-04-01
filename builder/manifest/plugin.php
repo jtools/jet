@@ -1,6 +1,15 @@
 <?php
 class JBuilderManifestPlugin extends JBuilderManifestBase
 {
+	protected function checkAttributes()
+	{
+		parent::checkAttributes();
+		
+		if (!isset($this->folder)) {
+			throw new Exception("Missing attribute 'folder'");
+		}
+	}
+	
 	public function build()
 	{
 		$this->checkAttributes();
