@@ -55,7 +55,7 @@ class JBuilderLibrary extends JBuilderExtension
 		//Here the missing options have to be set
 
 		//Here we should save the manifest file to the disk
-		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
+		JFile::write($this->buildfolder.'manifest.xml', $manifest->build());
 		
 		$this->createPackage('lib_'.$this->name.'.v'.$this->options['version'].'.zip');
 		

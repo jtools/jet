@@ -51,7 +51,7 @@ class JBuilderModule extends JBuilderExtension
 		}
 
 		//Here we should save the manifest file to the disk
-		JFile::write($this->buildfolder.$this->name.'.xml', $manifest->main());
+		JFile::write($this->buildfolder.$this->name.'.xml', $manifest->build());
 	
 		$this->createPackage();
 		

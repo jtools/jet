@@ -110,43 +110,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	{
 		$this->sql = $sql;
 	}
-
-	public function main()
-	{
-		$types = array('component', 'file', 'language', 'library', 'module', 'package', 'plugin', 'template');
-		$this->checkAttributes();
-		$this->log('['.$this->extname.'] Creating manifest file for '.$this->extname);
-
-		//Create Root tag
-		$root = $this->createRoot();
-		
-		//Create Metadata tags
-		$root = $this->createMetadata($root);
-
-		//Process the extension specific parts
-		$root = call_user_func(array($this, 'build'.ucfirst($this->type)), $root);
-
-		//Process media tag
-		$root = $this->createMedia($root);
-		
-		//Adding a scriptfile if present for the supported extensions
-		$root = $this->createScriptfile($root);
-		
-		//Create SQL install,uninstall and update tags
-		$root = $this->createSQL($root);
-
-		//Create language tag
-		$root = $this->createLanguage($root);
-		
-		//Handle update servers
-		$root = $this->createUpdatesites($root);
-		
-		//Save manifest.xml file
-		$this->dom->appendChild($root);
-		
-		//For debugging
-		return $this->dom->saveXML();
-	}
 	
 	/**
 	 * Create Root node of the manifest
@@ -162,15 +125,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		$root->setAttribute('type', $this->type);
 		$root->setAttribute('method', 'upgrade');
 		$root->setAttribute('version', $this->jversion);
-		
-		$clients = array('module', 'template', 'language');
-		if(in_array($this->type, $clients)) {
-			$root->setAttribute('client', $this->client);
-		}
-		
-		if($this->type == 'plugin') {
-			$root->setAttribute('group', $this->folder);
-		}
+
 		return $root;		
 	}
 	
@@ -187,11 +142,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		else
 			$name = $this->dom->createElement($name, $this->extname);
 		$root->appendChild($name);
-			
-		if($this->type == 'language') {
-			$tag = $this->dom->createElement('tag', $this->tag);
-			$root->appendChild($tag);
-		}
 		
 		$author = $this->dom->createElement('author', $this->author);
 		$creation = $this->dom->createElement('creationDate', date('F Y'));
@@ -219,9 +169,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	 */
 	protected function createMedia($root)
 	{
-		if(in_array($this->type, array('file', 'package')))
-			return $root;
-
 		//Handle media file section
 		if(is_dir($this->buildfolder.'/media/')) {
 			$mediafiles = $this->dom->createElement('media');
@@ -238,10 +185,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	 */
 	protected function createScriptfile($root)
 	{
-		$script = array('component', 'file', 'module', 'package', 'plugin');
-		if(!in_array($this->type, $script))
-			return $root;
-
 		$path = $this->buildfolder;
 		if($this->type == 'component') {
 			$path .= '/admin';
@@ -259,9 +202,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	 */
 	protected function createSQL($root)
 	{
-		if(!in_array($this->type, array('component', 'file', 'module', 'plugin')))
-			return $root;
-		
 		if(isset($this->options['newSQL'])) {
 			if($this->sql) {
 				$xml = simplexml_load_string($this->sql);
@@ -399,135 +339,6 @@ class JBuilderManifestBase extends JBuilderHelperBase
 			}
 			$root->appendChild($lang);
 		}
-		return $root;
-	}
-	
-	protected function buildFile($root)
-	{
-		$exclude = array('lang', 'media');
-		//Handle file section
-		if(is_dir($this->buildfolder)) {
-			$files = $this->dom->createElement('files');
-			$files = $this->filelist($this->buildfolder, $files, $exclude);
-			$root->appendChild($files);
-		}
-		
-		return $root;
-	}
-	
-	protected function buildLanguage($root)
-	{
-		if(in_array($this->client, array('both', 'site')))
-		{
-			$site = $this->dom->createElement('site');
-			$sitefiles = $this->dom->createElement('files');
-			$sitefiles->setAttribute('folder', 'site');
-			$sitefiles = $this->filelist($this->buildfolder.'/site/', $sitefiles);
-			$site->appendChild($sitefiles);
-			$root->appendChild($site);
-		}
-		if(in_array($this->client, array('both', 'administrator')))
-		{
-			$admin = $this->dom->createElement('administration');
-			$adminfiles = $this->dom->createElement('files');
-			$adminfiles->setAttribute('folder', 'admin');
-			$adminfiles = $this->filelist($this->buildfolder.'/administrator/', $adminfiles);
-			$admin->appendChild($adminfiles);
-			$root->appendChild($admin);			
-		}
-		
-		return $root;
-	}
-	
-	protected function buildLibrary($root)
-	{
-		$exclude = array('lang', 'media');
-		//Handle file section
-		if(is_dir($this->buildfolder)) {
-			$files = $this->dom->createElement('files');
-			$files = $this->filelist($this->buildfolder, $files, $exclude);
-			$root->appendChild($files);
-		}
-		
-		return $root;
-	}
-	
-	protected function buildModule($root)
-	{
-		$exclude = array('lang', 'media');
-		//Handle file section
-		if(is_dir($this->buildfolder)) {
-			$files = $this->dom->createElement('files');
-			$files = $this->filelist($this->buildfolder, $files, $exclude);
-			$root->appendChild($files);
-		}
-		
-		if(isset($this->options['config']) && is_object($this->options['config'])) {
-			$configs = $this->options['config']->children();
-			$config = $this->dom->createElement('config');
-			foreach($configs as $c) {
-				$temp = $this->dom->importNode(dom_import_simplexml($c), true);
-				$config->appendChild($temp);
-			}
-			$root->appendChild($config);
-		}
-		
-		return $root;
-	}
-	
-	protected function buildPackage($root)
-	{
-		/**	$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
-		if(in_array($this->type, $languages)) 
-		{
-			//Handle media file section
-			if(is_dir($this->buildfolder.'/language/')) {
-				$mediafiles = $this->dom->createElement('media');
-				$mediafiles->setAttribute('destination', $this->extname);
-				$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
-				$root->appendChild($mediafiles);
-			}
-		}**/
-		
-		return $root;
-	}
-	
-	protected function buildPlugin($root)
-	{
-		$exclude = array('lang', 'media');
-		$parts = explode('_', $this->extname, 3);
-		$added = false;
-		//Handle file section
-		if(is_dir($this->buildfolder)) {
-			$files = $this->dom->createElement('files');
-			$files = $this->filelist($this->buildfolder, $files, $exclude);
-			$files->firstChild->setAttribute('plugin', $parts[2]);
-			$root->appendChild($files);
-		}
-		
-		if(isset($this->options['config']) && is_object($this->options['config'])) {
-			$configs = $this->options['config']->children();
-			$config = $this->dom->createElement('config');
-			foreach($configs as $c) {
-				$temp = $this->dom->importNode(dom_import_simplexml($c), true);
-				$config->appendChild($temp);
-			}
-			$root->appendChild($config);
-		}
-		
-		return $root;		
-	}
-	
-	protected function buildTemplate($root)
-	{
-		$exclude = array('lang', 'media');
-		//Handle file section
-		if(is_dir($this->buildfolder)) {
-			$files = $this->dom->createElement('files');
-			$files = $this->filelist($this->buildfolder, $files, $exclude);
-			$root->appendChild($files);
-		}
-		
 		return $root;
 	}
 

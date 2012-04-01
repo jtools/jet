@@ -60,7 +60,7 @@ class JBuilderLanguage extends JBuilderExtension
 		$manifest->setClient($this->options['client']); //Setting this to 'both' temporarily for testing purposes
 		
 		//Here we should save the manifest file to the disk
-		JFile::write($this->buildfolder.'manifest.xml', $manifest->main());
+		JFile::write($this->buildfolder.'manifest.xml', $manifest->build());
 		
 		$this->createPackage('lng_'.$this->name.'.'.$this->options['client'].'.v'.$this->options['version'].'.zip');
 		

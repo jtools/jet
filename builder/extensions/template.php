@@ -57,7 +57,7 @@ class JBuilderTemplate extends JBuilderExtension
 		}
 
 		//Here we should save the manifest file to the disk
-		JFile::write($this->buildfolder.'templateDetails.xml', $manifest->main());
+		JFile::write($this->buildfolder.'templateDetails.xml', $manifest->build());
 		
 		$this->createPackage('tpl_'.$this->name.'.'.$this->options['client'].'.v'.$this->options['version'].'.zip');
 		
