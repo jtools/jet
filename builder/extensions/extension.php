@@ -89,7 +89,7 @@ class JBuilderExtension
 		return true;
 	}
 	
-	protected function setManifestData(JBuilderHelperManifest $manifest)
+	protected function setManifestData(JBuilderManifestBase $manifest)
 	{
 		$manifest->setType($this->getType());
 		$manifest->setAuthor($this->options['author']);

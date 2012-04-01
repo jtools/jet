@@ -52,7 +52,7 @@ class JBuilderLanguage extends JBuilderExtension
 		
 		$this->addIndexFiles();
 		
-		$manifest = new JBuilderHelperManifest();
+		$manifest = new JBuilderManifestLanguage();
 		
 		$manifest = $this->setManifestData($manifest);
 		

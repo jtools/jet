@@ -40,7 +40,7 @@ class JBuilderModule extends JBuilderExtension
 
 		$this->addIndexFiles();
 
-		$manifest = new JBuilderHelperManifest();
+		$manifest = new JBuilderManifestModule();
 		
 		$manifest = $this->setManifestData($manifest);
 		$manifest->setClient($this->options['client']);

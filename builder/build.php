@@ -25,6 +25,7 @@ class JoomlaExtensionBuilder extends JApplicationCli
 	{
 		JLoader::discover('JBuilderHelper', JPATH_BASE.'/helpers/');
 		JLoader::discover('JBuilder', JPATH_BASE.'/extensions/');
+		JLoader::discover('JBuilderManifest', JPATH_BASE.'/manifest/');
 		JLoader::discover('J', JPATH_BASE.'/../libraries/joomla/filesystem/');
 
 		$this->out(str_repeat('=', 79));

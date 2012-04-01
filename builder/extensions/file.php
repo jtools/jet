@@ -41,7 +41,7 @@ class JBuilderFile extends JBuilderExtension
 		
 		$this->addIndexFiles();
 		
-		$manifest = new JBuilderHelperManifest();
+		$manifest = new JBuilderManifestFile();
 		
 		$manifest = $this->setManifestData($manifest);
 		

@@ -1,25 +1,24 @@
 <?php
-
-class JBuilderHelperManifest extends JBuilderHelperBase {
-
+class JBuilderManifestBase extends JBuilderHelperBase
+{
 	protected $options = array();
-	private $type = null;
-	private $extname = null;
-	private $exttitle = null;
-	private $folder = null;
-	private $buildfolder = null;
-	private $version = null;
-	private $jversion = null;
-	private $copyright = null;
-	private $author = null;
-	private $email = null;
-	private $website = null;
-	private $license = null;
-	private $update = null;
-	private $client = null;
-	private $tag = null;
-	private $dom = null;
-	private $sql = null;
+	protected $type = null;
+	protected $extname = null;
+	protected $exttitle = null;
+	protected $folder = null;
+	protected $buildfolder = null;
+	protected $version = null;
+	protected $jversion = null;
+	protected $copyright = null;
+	protected $author = null;
+	protected $email = null;
+	protected $website = null;
+	protected $license = null;
+	protected $update = null;
+	protected $client = null;
+	protected $tag = null;
+	protected $dom = null;
+	protected $sql = null;
 	
 	public function setOption($key, $value)
 	{
@@ -117,10 +116,6 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		$types = array('component', 'file', 'language', 'library', 'module', 'package', 'plugin', 'template');
 		$this->checkAttributes();
 		$this->log('['.$this->extname.'] Creating manifest file for '.$this->extname);
-		$this->dom = new DOMDocument();
-		$this->dom->encoding = 'utf-8';//set the document encoding
-		$this->dom->xmlVersion = '1.0';//set xml version
-		$this->dom->formatOutput = true;//Nicely formats output with indentation and extra space 
 
 		//Create Root tag
 		$root = $this->createRoot();
@@ -151,15 +146,18 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		
 		//For debugging
 		return $this->dom->saveXML();
-		//For actual deployment
-		//file_put_contents($this->buildfolder.'/manifest.xml', $this->dom->saveXML());
 	}
 	
 	/**
 	 * Create Root node of the manifest
 	 */
-	private function createRoot()
+	protected function createRoot()
 	{
+		$this->dom = new DOMDocument();
+		$this->dom->encoding = 'utf-8';//set the document encoding
+		$this->dom->xmlVersion = '1.0';//set xml version
+		$this->dom->formatOutput = true;//Nicely formats output with indentation and extra space 
+		
 		$root = $this->dom->createElement('extension');
 		$root->setAttribute('type', $this->type);
 		$root->setAttribute('method', 'upgrade');
@@ -179,7 +177,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	/**
 	 * Create the Metadata tags
 	 */
-	private function createMetadata($root)
+	protected function createMetadata($root)
 	{
 		$name = 'name';
 		if($this->type == 'package')
@@ -219,7 +217,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	/**
 	 * This method generates the media tag 
 	 */
-	private function createMedia($root)
+	protected function createMedia($root)
 	{
 		if(in_array($this->type, array('file', 'package')))
 			return $root;
@@ -238,7 +236,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	/**
 	 * This method generates a scriptfile tag
 	 */
-	private function createScriptfile($root)
+	protected function createScriptfile($root)
 	{
 		$script = array('component', 'file', 'module', 'package', 'plugin');
 		if(!in_array($this->type, $script))
@@ -259,7 +257,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	/**
 	 * This method adds the necessary SQL tags
 	 */
-	private function createSQL($root)
+	protected function createSQL($root)
 	{
 		if(!in_array($this->type, array('component', 'file', 'module', 'plugin')))
 			return $root;
@@ -347,7 +345,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	/**
 	 * This method handles the updatesites tags
 	 */
-	private function createUpdatesites($root)
+	protected function createUpdatesites($root)
 	{
 		$updateSites = explode(',', $this->update);
 		if(count($updateSites) && strlen($updateSites[0])) {
@@ -369,7 +367,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 	/**
 	 * This method handles the language tags
 	 */
-	private function createLanguage($root, $add = '')
+	protected function createLanguage($root, $add = '')
 	{
 		if($add == '' && $this->type == 'component')
 			$add = '/site';
@@ -404,44 +402,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 	
-	/**
-	 * This method generates the component specific tags
-	 */
-	private function buildComponent($root)
-	{
-		//Handle frontend file section
-		if(is_dir($this->buildfolder.'/site/')) {
-			$frontfiles = $this->dom->createElement('files');
-			$frontfiles->setAttribute('folder', 'site');
-			$frontfiles = $this->filelist($this->buildfolder.'/site/', $frontfiles);
-			$root->appendChild($frontfiles);
-		}
-		
-		//Handle admin area
-		if(is_dir($this->buildfolder.'/admin/')) {
-			$admin = $this->dom->createElement('administration');
-			
-			//Handle admin files
-			$adminfiles = $this->dom->createElement('files');
-			$adminfiles->setAttribute('folder', 'admin');
-			$adminfiles = $this->filelist($this->buildfolder.'/admin/', $adminfiles);
-			$admin->appendChild($adminfiles);
-			
-			$admin = $this->createLanguage($admin, '/admin');
-			
-			$menu = $this->dom->createElement('menu', $this->extname);
-			
-			$admin->appendChild($menu);
-			
-			$admin = $this->createLanguage($admin, '/administrator');
-			
-			$root->appendChild($admin);
-		}
-		
-		return $root;
-	}
-
-	private function buildFile($root)
+	protected function buildFile($root)
 	{
 		$exclude = array('lang', 'media');
 		//Handle file section
@@ -454,7 +415,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 	
-	private function buildLanguage($root)
+	protected function buildLanguage($root)
 	{
 		if(in_array($this->client, array('both', 'site')))
 		{
@@ -478,7 +439,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 	
-	private function buildLibrary($root)
+	protected function buildLibrary($root)
 	{
 		$exclude = array('lang', 'media');
 		//Handle file section
@@ -491,7 +452,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 	
-	private function buildModule($root)
+	protected function buildModule($root)
 	{
 		$exclude = array('lang', 'media');
 		//Handle file section
@@ -514,7 +475,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 	
-	private function buildPackage($root)
+	protected function buildPackage($root)
 	{
 		/**	$languages = array('component', 'language', 'library', 'module', 'plugin', 'template');
 		if(in_array($this->type, $languages)) 
@@ -531,7 +492,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 	
-	private function buildPlugin($root)
+	protected function buildPlugin($root)
 	{
 		$exclude = array('lang', 'media');
 		$parts = explode('_', $this->extname, 3);
@@ -557,7 +518,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;		
 	}
 	
-	private function buildTemplate($root)
+	protected function buildTemplate($root)
 	{
 		$exclude = array('lang', 'media');
 		//Handle file section
@@ -570,7 +531,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $root;
 	}
 
-	private function filelist($folder, $dom, $exclude = array())
+	protected function filelist($folder, $dom, $exclude = array())
 	{
 		if(!is_dir($folder)) {
 			return;
@@ -605,7 +566,7 @@ class JBuilderHelperManifest extends JBuilderHelperBase {
 		return $dom;
 	}
 
-	private function checkAttributes()
+	protected function checkAttributes()
 	{
 		if (!isset($this->type)) {
 			throw new Exception("Missing attribute 'type'");
