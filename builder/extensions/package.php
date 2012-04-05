@@ -28,9 +28,7 @@ class JBuilderPackage extends JBuilderExtension
 		
 		$this->addIndexFiles();
 		
-		$manifest = new JBuilderManifestPackage();
-		
-		$manifest = $this->setManifestData($manifest);
+		$manifest = $this->getManifestObject();
 		
 		//Here the missing options have to be set
 

@@ -35,9 +35,7 @@ class JBuilderPlugin extends JBuilderExtension
 		
 		$this->addIndexFiles();
 
-		$manifest = new JBuilderManifestPlugin();
-		
-		$manifest = $this->setManifestData($manifest);
+		$manifest = $this->getManifestObject();
 		
 		//Here the missing options have to be set
 		$manifest->setFolder($this->options['folder']);

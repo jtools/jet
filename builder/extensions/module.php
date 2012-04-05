@@ -39,10 +39,8 @@ class JBuilderModule extends JBuilderExtension
 		$this->prepareLanguageFiles($this->options['client']);
 
 		$this->addIndexFiles();
-
-		$manifest = new JBuilderManifestModule();
 		
-		$manifest = $this->setManifestData($manifest);
+		$manifest = $this->getManifestObject();
 		$manifest->setClient($this->options['client']);
 		
 		//Here the missing options have to be set

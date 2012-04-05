@@ -89,9 +89,10 @@ class JBuilderExtension
 		return true;
 	}
 	
-	protected function setManifestData(JBuilderManifestBase $manifest)
+	protected function getManifestObject()
 	{
-		$manifest->setType($this->getType());
+		$class = 'JBuilderManifest'.$this->getType();
+		$manifest = new $class;
 		$manifest->setAuthor($this->options['author']);
 		$manifest->setEmail($this->options['email']);
 		$manifest->setLicense($this->options['license']);

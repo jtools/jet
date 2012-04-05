@@ -19,6 +19,11 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	protected $dom = null;
 	protected $sql = null;
 	
+	public function __construct()
+	{
+		$this->type = strtolower(str_replace('JBuilderManifest', '', get_class($this)));
+	}
+	
 	public function setOption($key, $value)
 	{
 		$this->options[$key] = $value;
@@ -26,13 +31,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	
 	public function setType($type)
 	{
-		$types = array('component', 'file', 'language', 'library', 'module', 'package', 'plugin', 'template');
-		if(in_array($type, $types)) {
-			$this->type = $type;
-		} else {
-			throw new Exception('Manifest-Task called with an invalid type!');
-			
-		}
+		$this->type = $type;
 	}
 
 	public function setExtName($extname)

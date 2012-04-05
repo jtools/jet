@@ -52,9 +52,7 @@ class JBuilderLanguage extends JBuilderExtension
 		
 		$this->addIndexFiles();
 		
-		$manifest = new JBuilderManifestLanguage();
-		
-		$manifest = $this->setManifestData($manifest);
+		$manifest = $this->getManifestObject();
 		
 		//Here the missing options have to be set
 		$manifest->setClient($this->options['client']); //Setting this to 'both' temporarily for testing purposes
