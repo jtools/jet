@@ -156,7 +156,7 @@ class JBuilderExtension
 		if($found) {
 			JFolder::create($this->buildfolder.'lang/');
 			foreach($files as $client => $langs) {
-				if(count($files) > 1) {
+				if(count($clients) > 1) {
 					$path = $this->buildfolder.'lang/'.$client.'/';
 				} else {
 					$path = $this->buildfolder.'lang/';

@@ -30,13 +30,11 @@ class JBuilderManifestComponent extends JBuilderManifestBase
 			$adminfiles = $this->filelist($this->buildfolder.'/admin/', $adminfiles);
 			$admin->appendChild($adminfiles);
 			
-			$admin = $this->createLanguage($admin, '/admin');
-			
 			$menu = $this->dom->createElement('menu', $this->extname);
 			
 			$admin->appendChild($menu);
 			
-			$admin = $this->createLanguage($admin, '/administrator');
+			$admin = $this->createLanguage($admin, true);
 			
 			$root->appendChild($admin);
 		}
@@ -61,5 +59,14 @@ class JBuilderManifestComponent extends JBuilderManifestBase
 		
 		//For debugging
 		return $this->dom->saveXML();
+	}
+	
+	protected function createLanguage($root, $admin = false) {
+		if($admin && is_dir($this->buildfolder.'lang/administrator/')) {
+			return $this->createLanguageTag($root, 'lang/administrator/');
+		} elseif(is_dir($this->buildfolder.'lang/site/')) {
+			return $this->createLanguageTag($root, 'lang/site/');
+		}
+		return $root;
 	}
 }

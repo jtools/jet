@@ -17,13 +17,10 @@ class JBuilderComponent extends JBuilderExtension
 		$this->out('TRYING TO BUILD '.$this->options['name'].' COMPONENT...');
 		$this->out(str_repeat('-', 79));
 		
-		$clients = array();
-		
 		if(is_dir($this->joomlafolder.'administrator/components/'.$this->name.'/')) {
 			$this->out('['.$this->name.'] Found administrator files');
 			JFolder::create($this->buildfolder.'admin');
 			JFolder::copy($this->joomlafolder.'administrator/components/'.$this->name.'/', $this->buildfolder.'admin', '', true);
-			$clients[] = 'administrator';
 			$this->out('['.$this->name.'] Creating MD5SUM file for administrator');
 			$md5admin = new JBuilderHelperMd5();
 			$md5admin->setBuildFolder($this->buildfolder.'admin/');
@@ -34,7 +31,6 @@ class JBuilderComponent extends JBuilderExtension
 			$this->out('['.$this->name.'] Found frontend files');
 			JFolder::create($this->buildfolder.'site');
 			JFolder::copy($this->joomlafolder.'components/'.$this->name.'/', $this->buildfolder.'site', '', true);
-			$clients[] = 'site';
 			$this->out('['.$this->name.'] Creating MD5SUM file for site');
 			$md5site = new JBuilderHelperMd5();
 			$md5site->setBuildFolder($this->buildfolder.'site/');
@@ -43,7 +39,7 @@ class JBuilderComponent extends JBuilderExtension
 		
 		$this->prepareMediaFiles();
 		
-		$this->prepareLanguageFiles($clients);
+		$this->prepareLanguageFiles(array('site', 'administrator'));
 		
 		$this->prepareSQL();
 		

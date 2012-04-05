@@ -305,38 +305,31 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	/**
 	 * This method handles the language tags
 	 */
-	protected function createLanguage($root, $add = '')
+	protected function createLanguage($root)
 	{
-		if($add == '' && $this->type == 'component')
-			$add = '/site';
-
-		if(is_dir($this->buildfolder.'/lang'.$add)) {
-			$lang = $this->dom->createElement('languages');
-			$folder = $this->buildfolder.'/lang'.$add.'/';
-			$dir = opendir($folder);
-			while(false !== ($entry = readdir($dir))) {
-				if($entry == '.' || $entry == '..')
-					continue;
-				if(is_dir($folder.$entry)) {
-					$folder2 = $this->buildfolder.'/lang'.$add.'/'.$entry.'/';
-					$dir2 = opendir($folder2);
-					while(false !== ($entry2 = readdir($dir2))) {
-						if(is_file($folder2.$entry2) && $entry2 != 'index.html') {
-							$e = $this->dom->createElement('language', 'lang'.$add.'/'.$entry.'/'.$entry2);
-							$e->setAttribute('tag', $entry);
-							$lang->appendChild($e);
-						}
-					}
-				}
-				if(is_file($folder.$entry) && $entry != 'index.html') {
-					$tag = explode('.', $entry);
-					$e = $this->dom->createElement('language', 'lang'.$add.'/'.$entry);
-					$e->setAttribute('tag', $tag[0]);
-					$lang->appendChild($e);
-				}
-			}
-			$root->appendChild($lang);
+		if(is_dir($this->buildfolder.'lang/')) {
+			return $this->createLanguageTag($root, 'lang/');
 		}
+		
+		return $root;
+	}
+	
+	protected function createLanguageTag($root, $folder)
+	{
+		$lang = $this->dom->createElement('languages');
+		$dir = opendir($this->buildfolder.$folder);
+		while(false !== ($entry = readdir($dir))) {
+			if($entry == '.' || $entry == '..')
+				continue;
+			if(is_file($this->buildfolder.$folder.$entry) && $entry != 'index.html') {
+				$tag = explode('.', $entry);
+				$e = $this->dom->createElement('language', $folder.$entry);
+				$e->setAttribute('tag', $tag[0]);
+				$lang->appendChild($e);
+			}
+		}
+		$root->appendChild($lang);
+
 		return $root;
 	}
 
