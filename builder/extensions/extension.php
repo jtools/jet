@@ -197,6 +197,9 @@ abstract class JBuilderExtension
 	
 	protected function prepareSQL()
 	{
+		if(!isset($this->options['newSQL'])) {
+			return;
+		}
 		if(!isset($this->options['sql'])) {
 			return;
 		}
