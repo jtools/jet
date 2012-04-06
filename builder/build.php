@@ -73,6 +73,9 @@ class JoomlaExtensionBuilder extends JApplicationCli
 			$this->close(1);
 		}
 		
+		$this->joomlafolder = realpath($this->joomlafolder).'/';
+		$this->buildfolder = realpath($this->buildfolder).'/';
+		
 		$config = JFactory::getConfig($this->joomlafolder.'configuration.php');
 		
 		$this->cleanBuildFolder();
