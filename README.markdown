@@ -10,6 +10,8 @@ php build.php &lt;config file&gt; -j &lt;joomla folder&gt; [-b &lt;build folder&
 
 The commands in brackets are optional.
 
+-h --help Get a help screen
+
 &lt;config file&gt; This is a file like the build.jet found in this repository
 
 -j &lt;joomla folder&gt; The absolute path to the Joomla folder that we are building this stuff from.

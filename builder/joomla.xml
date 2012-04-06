@@ -11,6 +11,7 @@
 		<website>http://www.joomla.org</website>
 		<license>GPL</license>
 		<joomlaversion>2.5</joomlaversion>
+		<update>http://www.joomla.org/update/something</update>
 	</common>
 	<components>
 		<component>

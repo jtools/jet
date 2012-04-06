@@ -1,4 +1,25 @@
 <?php
+/**
+* JET - Joomla Extension Tools
+*
+* A Tool to build extensions out of a Joomla development environment
+*
+* Options:
+*
+* build.php <build.xml> [options]
+* 
+* --help, -h - Try this first =;)
+* 
+* --joomla -j <path> - Path to the Joomla installation with the elements to build.
+* -n - 		Use new SQL processing feature.
+* -v - 		Verbose output.
+*
+* @author Hannes Papenberg - hackwar - 02/2012
+* @version 0.1
+* @license GPL SA
+* @link https://github.com/jtools/jet
+*/
+
 define( '_JEXEC', 1 );
 define('JPATH_BASE', dirname(__FILE__));
 define('JPATH_ROOT', realpath(JPATH_BASE.'/../'));
@@ -32,7 +53,13 @@ class JoomlaExtensionBuilder extends JApplicationCli
 		$this->out('JOOMLA! EXTENSION TOOLS',true,true);
 		$this->out('Extension Builder',true,true);
 		$this->out(str_repeat('=', 79));
-		
+
+		if($this->input->get('help') || $this->input->get('h'))
+		{
+			$this->help();
+
+			return true;
+		}
 		$this->loadPropertiesFromCLI();
 
 		if(count($this->input->args)) {
@@ -40,14 +67,14 @@ class JoomlaExtensionBuilder extends JApplicationCli
 		} else {
 			$this->loadPropertiesFromInput();
 		}
-		
-		$config = JFactory::getConfig($this->joomlafolder.'configuration.php');
 
 		if(!$this->joomlafolder) {
 			$this->out('*FATAL ERROR* No Joomla installation as build source given!');
 			$this->close(1);
 		}
-
+		
+		$config = JFactory::getConfig($this->joomlafolder.'configuration.php');
+		
 		$this->cleanBuildFolder();
 
 		$types = array();
@@ -75,6 +102,21 @@ class JoomlaExtensionBuilder extends JApplicationCli
 		$this->close(0);
 	}
 
+	protected function help()
+	{
+		$this->out('Usage:');
+
+		$this->out('
+build.php <build.xml> [options]
+
+--help, -h - Try this first =;)
+
+--joomla -j <path> - Path to the Joomla installation with the elements to build.
+-n - 		Use new SQL processing feature.
+-v - 		Verbose output.
+');
+	}
+	
 	protected function loadPropertiesFromFile($file)
 	{
 		if(is_file($file)) {

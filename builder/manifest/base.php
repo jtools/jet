@@ -1,4 +1,15 @@
 <?php
+/**
+* JET - Joomla Extension Tools
+*
+* A Tool to build extensions out of a Joomla development environment
+*
+* @author Hannes Papenberg - hackwar - 02/2012
+* @version 0.1
+* @license GPL SA
+* @link https://github.com/jtools/jet
+*/
+
 class JBuilderManifestBase extends JBuilderHelperBase
 {
 	protected $options = array();
@@ -219,6 +230,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 				$path .= '/admin';
 			
 			if(is_dir($path.'/sql')) {
+				
 				if(file_exists($path.'/sql/install.mysql.utf8.sql')) {
 					$install = $this->dom->createElement('install');
 					$sql = $this->dom->createElement('sql');
@@ -277,6 +289,19 @@ class JBuilderManifestBase extends JBuilderHelperBase
 				}
 			}
 		}
+		if(isset($this->options['tables'])) {
+			$tables = $this->dom->createElement('tables');
+			foreach($this->options['tables'] as $table) {
+				$t = $this->dom->createElement('table', (string)$table);
+				$attr = $table->attributes();
+				if(isset($attr['optional'])) {
+					$t->setAttribute('type', 'optional');
+				}
+				$tables->appendChild($t);
+			}
+			$root->appendChild($tables);
+		}
+		
 		return $root;
 	}
 	

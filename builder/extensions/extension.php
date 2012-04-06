@@ -1,5 +1,16 @@
 <?php
-class JBuilderExtension
+/**
+* JET - Joomla Extension Tools
+*
+* A Tool to build extensions out of a Joomla development environment
+*
+* @author Hannes Papenberg - hackwar - 02/2012
+* @version 0.1
+* @license GPL SA
+* @link https://github.com/jtools/jet
+*/
+
+abstract class JBuilderExtension
 {
 	protected $options = array();
 	
@@ -36,7 +47,7 @@ class JBuilderExtension
 	
 	public static function getOptions()
 	{
-		return array('copyright', 'version', 'email', 'website','name', 'joomlaversion');
+		return array('copyright', 'version', 'email', 'website','name', 'joomlaversion', 'update');
 	}
 	
 	public function __construct($options)
@@ -89,6 +100,8 @@ class JBuilderExtension
 		return true;
 	}
 	
+	abstract function build();
+	
 	protected function getManifestObject()
 	{
 		$class = 'JBuilderManifest'.$this->getType();
@@ -102,8 +115,14 @@ class JBuilderExtension
 		$manifest->setBuildFolder($this->buildfolder);
 		$manifest->setVersion($this->options['version']);
 		$manifest->setJVersion($this->options['joomlaversion']);
+		if(isset($this->options['update'])) {
+			$manifest->setUpdate($this->options['update']);
+		}
 		if($this->sql) {
 			$manifest->setSQL($this->sql);
+		}
+		if(isset($this->options['sql'])) {
+			$manifest->setOption('tables', $this->options['sql']);
 		}
 		if(isset($this->options['newSQL'])) {
 			$manifest->setOption('newSQL', true);
@@ -184,7 +203,7 @@ class JBuilderExtension
 		$this->out('['.$this->name.'] Preparing database tables and sample content');
 		
 		$db = JFactory::getDBO();
-		$db->setQuery('SELECT * from #__banners');
+		
 		$exporter = new JDatabaseExporterMySQL();
 		$exporter->setDbo($db);
 		$tables = array();
