@@ -21,6 +21,7 @@ define('JPATH_ROOT', realpath(JPATH_BASE . '/../'));
 
 $GLOBALS['timer'] = explode(' ', microtime());
 
+/** @noinspection PhpIncludeInspection */
 require_once '../libraries/import.php';
 
 class JoomlaExtensionBuilder extends JApplicationCli
