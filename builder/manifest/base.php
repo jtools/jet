@@ -12,22 +12,41 @@
 class JBuilderManifestBase extends JBuilderHelperBase
 {
 	protected $options = array();
+
 	protected $type = null;
+
 	protected $extname = null;
+
 	protected $exttitle = null;
+
 	protected $folder = null;
+
 	protected $buildfolder = null;
+
 	protected $version = null;
+
 	protected $jversion = null;
+
 	protected $copyright = null;
+
 	protected $author = null;
+
 	protected $email = null;
+
 	protected $website = null;
+
 	protected $license = null;
+
 	protected $update = null;
+
 	protected $client = null;
+
+	/** @var DOMDocument */
 	protected $dom = null;
+
 	protected $sql = null;
+
+	protected $tag = null;
 
 	public function __construct()
 	{
@@ -121,6 +140,8 @@ class JBuilderManifestBase extends JBuilderHelperBase
 
 	/**
 	 * Create Root node of the manifest
+	 *
+	 * @return  DOMElement
 	 */
 	protected function createRoot()
 	{
@@ -139,6 +160,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 
 	/**
 	 * Create the Metadata tags
+	 *
+	 * @param   DOMElement  $root
+	 *
+	 * @return  DOMElement
 	 */
 	protected function createMetadata($root)
 	{
@@ -394,11 +419,18 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		return $root;
 	}
 
+	/**
+	 * @param   string      $folder
+	 * @param   DOMElement  $dom
+	 * @param   string[]    $exclude
+	 *
+	 * @return  DOMElement
+	 */
 	protected function filelist($folder, $dom, $exclude = array())
 	{
 		if (!is_dir($folder))
 		{
-			return null;
+			return $dom;
 		}
 		$files   = array();
 		$folders = array();

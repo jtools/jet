@@ -15,6 +15,8 @@ abstract class JBuilderExtension
 
 	protected $name = null;
 
+	protected $type = null;
+
 	protected $buildfolder = null;
 
 	protected $joomlafolder = null;
