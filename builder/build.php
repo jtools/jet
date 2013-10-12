@@ -26,6 +26,7 @@ require_once '../libraries/import.php';
 
 class JoomlaExtensionBuilder extends JApplicationCli
 {
+	/** @var JBuilderExtension[] */
 	protected $extensions = array();
 
 	protected $types = array();
@@ -81,15 +82,12 @@ class JoomlaExtensionBuilder extends JApplicationCli
 		$this->joomlafolder = realpath($this->joomlafolder) . '/';
 		$this->buildfolder  = realpath($this->buildfolder) . '/';
 
-		$config = JFactory::getConfig($this->joomlafolder . 'configuration.php');
-
 		$this->cleanBuildFolder();
 
 		$types = array();
 		define('JPATH_BUILDFOLDER', $this->buildfolder);
 		foreach ($this->extensions as $extension)
 		{
-			$folder = $this->isFolderPrepared($extension->getType(), $extension);
 			try
 			{
 				$extension->check();
@@ -131,6 +129,7 @@ build.php <build.xml> [options]
 
 	protected function loadPropertiesFromFile($file)
 	{
+		$path = null;
 		if (is_file($file))
 		{
 			$path = $file;
@@ -154,6 +153,7 @@ build.php <build.xml> [options]
 			$this->close(1);
 		}
 
+		/** @var SimpleXMLElement $xml */
 		if ($xml->getName() != 'jet')
 		{
 			$this->out('[config] Not a valid JET file');
@@ -165,6 +165,7 @@ build.php <build.xml> [options]
 			$allowedGlobalOptions = array('name', 'type', 'client');
 			foreach ($common[0]->children() as $option)
 			{
+				/** @var SimpleXMLElement $option */
 				if (!in_array($option->getName(), $allowedGlobalOptions))
 				{
 					$this->options[$option->getName()] = (string)$option;
@@ -216,6 +217,7 @@ build.php <build.xml> [options]
 				$opts = $this->options;
 				foreach ($extension->children() as $extensionOption)
 				{
+					/** @var SimpleXMLElement $extensionOption */
 					if (!in_array($extensionOption->getName(), $options))
 					{
 						continue;
@@ -225,7 +227,7 @@ build.php <build.xml> [options]
 					{
 						$opts[$extensionOption->getName()] = $extensionOption;
 					}
-					elseif (count($extensionOption->attributes()))
+					elseif ($extensionOption->attributes()->count())
 					{
 						$opts[$extensionOption->getName()] = $extensionOption->attributes();
 					}
@@ -316,7 +318,7 @@ build.php <build.xml> [options]
 		}
 	}
 
-	protected function isFolderPrepared($type, $extension)
+	protected function isFolderPrepared($type)
 	{
 		if (!is_dir($this->buildfolder . $type . '/'))
 		{

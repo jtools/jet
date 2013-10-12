@@ -39,6 +39,7 @@ class JBuilderFile extends JBuilderExtension
 		{
 			foreach ($this->options['files'] as $element)
 			{
+				/** @var SimpleXMLElement $element */
 				if ($element->getName() == 'folder')
 				{
 					if (is_dir($this->joomlafolder . (string)$element))

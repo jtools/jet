@@ -36,7 +36,7 @@ class JBuilderManifestPlugin extends JBuilderManifestBase
 
 		$exclude = array('lang', 'media');
 		$parts   = explode('_', $this->extname, 3);
-		$added   = false;
+
 		//Handle file section
 		if (is_dir($this->buildfolder))
 		{

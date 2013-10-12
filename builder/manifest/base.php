@@ -9,8 +9,9 @@
  * @link    https://github.com/jtools/jet
  */
 
-class JBuilderManifestBase extends JBuilderHelperBase
+abstract class JBuilderManifestBase extends JBuilderHelperBase
 {
+	/** @var SimpleXMLElement[] */
 	protected $options = array();
 
 	protected $type = null;
@@ -52,6 +53,8 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	{
 		$this->type = strtolower(str_replace('JBuilderManifest', '', get_class($this)));
 	}
+
+	abstract public function build();
 
 	public function setOption($key, $value)
 	{
@@ -205,6 +208,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 
 	/**
 	 * This method generates the media tag
+	 *
+	 * @param   DOMElement  $root
+	 *
+	 * @return  DOMElement
 	 */
 	protected function createMedia($root)
 	{
@@ -222,6 +229,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 
 	/**
 	 * This method generates a script file tag
+	 *
+	 * @param   DOMElement  $root
+	 *
+	 * @return  DOMElement
 	 */
 	protected function createScriptFile($root)
 	{
@@ -241,6 +252,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 
 	/**
 	 * This method adds the necessary SQL tags
+	 *
+	 * @param   DOMElement  $root
+	 *
+	 * @return  DOMElement
 	 */
 	protected function createSQL($root)
 	{
@@ -345,6 +360,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 			$tables = $this->dom->createElement('tables');
 			foreach ($this->options['tables'] as $table)
 			{
+				/** @var SimpleXMLElement $table */
 				$t    = $this->dom->createElement('table', (string)$table);
 				$attr = $table->attributes();
 				if (isset($attr['optional']))
@@ -361,6 +377,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 
 	/**
 	 * This method handles the updatesites tags
+	 *
+	 * @param   DOMElement  $root
+	 *
+	 * @return  DOMElement
 	 */
 	protected function createUpdatesites($root)
 	{
@@ -396,6 +416,12 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		return $root;
 	}
 
+	/**
+	 * @param   DOMElement  $root
+	 * @param   string      $folder
+	 *
+	 * @return  DOMElement
+	 */
 	protected function createLanguageTag($root, $folder)
 	{
 		$lang = $this->dom->createElement('languages');

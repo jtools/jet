@@ -23,6 +23,13 @@ abstract class JBuilderExtension
 
 	protected $sql = null;
 
+	/**
+	 * @param $type
+	 * @param $options
+	 *
+	 * @return JBuilderExtension
+	 * @throws Exception
+	 */
 	public static function getInstance($type, $options)
 	{
 		$types = array(
@@ -114,9 +121,13 @@ abstract class JBuilderExtension
 
 	abstract function build();
 
+	/**
+	 * @return  JBuilderManifestBase
+	 */
 	protected function getManifestObject()
 	{
 		$class    = 'JBuilderManifest' . $this->getType();
+		/** @var JBuilderManifestBase $manifest */
 		$manifest = new $class;
 		$manifest->setAuthor($this->options['author']);
 		$manifest->setEmail($this->options['email']);

@@ -13,7 +13,6 @@ class JBuilderHelperIndexfiles extends JBuilderHelperBase
 {
 
 	public $path = null;
-	private $dir = null;
 	private $counter = 0;
 	private $name = null;
 
