@@ -27,15 +27,15 @@ class JBuilderManifestPackage extends JBuilderManifestBase
 		{
 		//Handle media file section
 		if(is_dir($this->buildfolder.'/language/')) {
-		$mediafiles = $this->dom->createElement('media');
-		$mediafiles->setAttribute('destination', $this->extname);
-		$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
-		$root->appendChild($mediafiles);
+		$mediaFiles = $this->dom->createElement('media');
+		$mediaFiles->setAttribute('destination', $this->extname);
+		$mediaFiles = $this->filelist($this->buildfolder.'/media/', $mediaFiles);
+		$root->appendChild($mediaFiles);
 		}
 		}**/
 
-		//Adding a scriptfile if present for the supported extensions
-		$root = $this->createScriptfile($root);
+		//Adding a script file if present for the supported extensions
+		$root = $this->createScriptFile($root);
 
 		//Create language tag
 		$root = $this->createLanguage($root);

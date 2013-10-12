@@ -104,7 +104,7 @@ abstract class JBuilderExtension
 		}
 		if (!JFolder::create($this->buildfolder))
 		{
-			throw new Exception('*FATAL ERROR* Couldn\'t create build folder! ' . $this->buildfolder);
+			throw new Exception('*FATAL ERROR* Could not create build folder! ' . $this->buildfolder);
 		}
 
 		return true;
@@ -200,7 +200,7 @@ abstract class JBuilderExtension
 		if ($found)
 		{
 			JFolder::create($this->buildfolder . 'lang/');
-			foreach ($files as $client => $langs)
+			foreach ($files as $client => $languages)
 			{
 				if (count($clients) > 1)
 				{
@@ -211,14 +211,14 @@ abstract class JBuilderExtension
 					$path = $this->buildfolder . 'lang/';
 				}
 				JFolder::create($path);
-				foreach ($langs as $lang => $files)
+				foreach ($languages as $lang => $files)
 				{
 					$this->out('[' . $this->name . '] Found ' . count($files) . ' files for "' . $client . '" client and language ' . $lang);
-					foreach ($files as $file => $filepath)
+					foreach ($files as $file => $filePath)
 					{
 						try
 						{
-							JFile::copy($filepath, $path . $file);
+							JFile::copy($filePath, $path . $file);
 						} catch (Exception $e)
 						{
 							//throw error

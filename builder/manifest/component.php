@@ -25,10 +25,10 @@ class JBuilderManifestComponent extends JBuilderManifestBase
 		//Handle frontend file section
 		if (is_dir($this->buildfolder . '/site/'))
 		{
-			$frontfiles = $this->dom->createElement('files');
-			$frontfiles->setAttribute('folder', 'site');
-			$frontfiles = $this->filelist($this->buildfolder . '/site/', $frontfiles);
-			$root->appendChild($frontfiles);
+			$frontFiles = $this->dom->createElement('files');
+			$frontFiles->setAttribute('folder', 'site');
+			$frontFiles = $this->filelist($this->buildfolder . '/site/', $frontFiles);
+			$root->appendChild($frontFiles);
 		}
 
 		//Handle admin area
@@ -37,10 +37,10 @@ class JBuilderManifestComponent extends JBuilderManifestBase
 			$admin = $this->dom->createElement('administration');
 
 			//Handle admin files
-			$adminfiles = $this->dom->createElement('files');
-			$adminfiles->setAttribute('folder', 'admin');
-			$adminfiles = $this->filelist($this->buildfolder . '/admin/', $adminfiles);
-			$admin->appendChild($adminfiles);
+			$adminFiles = $this->dom->createElement('files');
+			$adminFiles->setAttribute('folder', 'admin');
+			$adminFiles = $this->filelist($this->buildfolder . '/admin/', $adminFiles);
+			$admin->appendChild($adminFiles);
 
 			$menu = $this->dom->createElement('menu', $this->extname);
 
@@ -54,8 +54,8 @@ class JBuilderManifestComponent extends JBuilderManifestBase
 		//Process media tag
 		$root = $this->createMedia($root);
 
-		//Adding a scriptfile if present for the supported extensions
-		$root = $this->createScriptfile($root);
+		//Adding a script file if present for the supported extensions
+		$root = $this->createScriptFile($root);
 
 		//Create SQL install,uninstall and update tags
 		$root = $this->createSQL($root);

@@ -214,24 +214,24 @@ build.php <build.xml> [options]
 			foreach ($extensions as $extension)
 			{
 				$opts = $this->options;
-				foreach ($extension->children() as $exopt)
+				foreach ($extension->children() as $extensionOption)
 				{
-					if (!in_array($exopt->getName(), $options))
+					if (!in_array($extensionOption->getName(), $options))
 					{
 						continue;
 					}
 
-					if ($exopt->count())
+					if ($extensionOption->count())
 					{
-						$opts[$exopt->getName()] = $exopt;
+						$opts[$extensionOption->getName()] = $extensionOption;
 					}
-					elseif (count($exopt->attributes()))
+					elseif (count($extensionOption->attributes()))
 					{
-						$opts[$exopt->getName()] = $exopt->attributes();
+						$opts[$extensionOption->getName()] = $extensionOption->attributes();
 					}
 					else
 					{
-						$opts[$exopt->getName()] = (string)$exopt;
+						$opts[$extensionOption->getName()] = (string)$extensionOption;
 					}
 				}
 				$adapter = JBuilderExtension::getInstance($type, $opts);

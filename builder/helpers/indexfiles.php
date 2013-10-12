@@ -46,15 +46,15 @@ class JBuilderHelperIndexfiles extends JBuilderHelperBase
 			throw new BuildException("'path' attribute not a valid path");
 		}
 
-		$this->readdir($this->path . '/');
+		$this->readDir($this->path . '/');
 		$this->log('[' . $this->name . '] Added ' . $this->counter . ' index.html files to the project');
 	}
 
-	private function readdir($dir)
+	private function readDir($dir)
 	{
 		if (!file_exists($dir . 'index.html'))
 		{
-			file_put_contents($dir . 'index.html', '<html><body bgcolor="#FFFFFF"></body></html>');
+			file_put_contents($dir . 'index.html', '<!DOCTYPE html><title></title>');
 			$this->counter++;
 		}
 		if ($dh = opendir($dir))
@@ -63,7 +63,7 @@ class JBuilderHelperIndexfiles extends JBuilderHelperBase
 			{
 				if (filetype($dir . $file) == 'dir' && !in_array($file, array('.', '..')))
 				{
-					$this->readdir($dir . $file . '/');
+					$this->readDir($dir . $file . '/');
 				}
 			}
 		}

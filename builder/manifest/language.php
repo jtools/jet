@@ -43,19 +43,19 @@ class JBuilderManifestLanguage extends JBuilderManifestBase
 		if (in_array($this->client, array('both', 'site')))
 		{
 			$site      = $this->dom->createElement('site');
-			$sitefiles = $this->dom->createElement('files');
-			$sitefiles->setAttribute('folder', 'site');
-			$sitefiles = $this->filelist($this->buildfolder . '/site/', $sitefiles);
-			$site->appendChild($sitefiles);
+			$siteFiles = $this->dom->createElement('files');
+			$siteFiles->setAttribute('folder', 'site');
+			$siteFiles = $this->filelist($this->buildfolder . '/site/', $siteFiles);
+			$site->appendChild($siteFiles);
 			$root->appendChild($site);
 		}
 		if (in_array($this->client, array('both', 'administrator')))
 		{
 			$admin      = $this->dom->createElement('administration');
-			$adminfiles = $this->dom->createElement('files');
-			$adminfiles->setAttribute('folder', 'admin');
-			$adminfiles = $this->filelist($this->buildfolder . '/administrator/', $adminfiles);
-			$admin->appendChild($adminfiles);
+			$adminFiles = $this->dom->createElement('files');
+			$adminFiles->setAttribute('folder', 'admin');
+			$adminFiles = $this->filelist($this->buildfolder . '/administrator/', $adminFiles);
+			$admin->appendChild($adminFiles);
 			$root->appendChild($admin);
 		}
 

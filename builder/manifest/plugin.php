@@ -61,8 +61,8 @@ class JBuilderManifestPlugin extends JBuilderManifestBase
 		//Process media tag
 		$root = $this->createMedia($root);
 
-		//Adding a scriptfile if present for the supported extensions
-		$root = $this->createScriptfile($root);
+		//Adding a script file if present for the supported extensions
+		$root = $this->createScriptFile($root);
 
 		//Create SQL install,uninstall and update tags
 		$root = $this->createSQL($root);

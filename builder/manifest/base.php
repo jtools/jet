@@ -161,8 +161,8 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		$creation    = $this->dom->createElement('creationDate', date('F Y'));
 		$copyright   = $this->dom->createElement('copyright', $this->copyright);
 		$license     = $this->dom->createElement('license', $this->license);
-		$authormail  = $this->dom->createElement('authorEmail', $this->email);
-		$authorurl   = $this->dom->createElement('authorUrl', $this->website);
+		$authorMail  = $this->dom->createElement('authorEmail', $this->email);
+		$authorUrl   = $this->dom->createElement('authorUrl', $this->website);
 		$version     = $this->dom->createElement('version', $this->version);
 		$description = $this->dom->createElement('description', strtoupper($this->extname) . '_EXTENSION_DESC');
 
@@ -170,8 +170,8 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		$root->appendChild($creation);
 		$root->appendChild($copyright);
 		$root->appendChild($license);
-		$root->appendChild($authormail);
-		$root->appendChild($authorurl);
+		$root->appendChild($authorMail);
+		$root->appendChild($authorUrl);
 		$root->appendChild($version);
 		$root->appendChild($description);
 
@@ -186,19 +186,19 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		//Handle media file section
 		if (is_dir($this->buildfolder . '/media/'))
 		{
-			$mediafiles = $this->dom->createElement('media');
-			$mediafiles->setAttribute('destination', $this->extname);
-			$mediafiles = $this->filelist($this->buildfolder . '/media/', $mediafiles);
-			$root->appendChild($mediafiles);
+			$mediaFiles = $this->dom->createElement('media');
+			$mediaFiles->setAttribute('destination', $this->extname);
+			$mediaFiles = $this->filelist($this->buildfolder . '/media/', $mediaFiles);
+			$root->appendChild($mediaFiles);
 		}
 
 		return $root;
 	}
 
 	/**
-	 * This method generates a scriptfile tag
+	 * This method generates a script file tag
 	 */
-	protected function createScriptfile($root)
+	protected function createScriptFile($root)
 	{
 		$path = $this->buildfolder;
 		if ($this->type == 'component')
@@ -207,8 +207,8 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		}
 		if (is_file($path . '/' . $this->extname . '.script.php'))
 		{
-			$scripttag = $this->dom->createElement('scriptfile', $this->extname . '.script.php');
-			$root->appendChild($scripttag);
+			$scriptTag = $this->dom->createElement('scriptfile', $this->extname . '.script.php');
+			$root->appendChild($scriptTag);
 		}
 
 		return $root;
