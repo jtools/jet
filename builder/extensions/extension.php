@@ -239,21 +239,28 @@ abstract class JBuilderExtension
 		{
 			return;
 		}
-		$this->out('[' . $this->name . '] Preparing database tables and sample content');
 
 		$db = JFactory::getDBO();
 
-		$exporter = new JDatabaseExporterMySQL();
-		$exporter->setDbo($db);
-		$tables = array();
-		foreach ($this->options['sql'] as $table)
+		if ($db instanceof JDatabaseMysql)
 		{
-			$tables[] = (string)$table;
+			$this->out('[' . $this->name . '] Preparing database tables and sample content');
+
+			$exporter = new JDatabaseExporterMySQL();
+			$exporter->setDbo($db);
+			$tables = array();
+			foreach ($this->options['sql'] as $table)
+			{
+				$tables[] = (string)$table;
+			}
+			$exporter->from($tables);
+
+			$this->sql = (string)$exporter;
 		}
-
-		$exporter->from($tables);
-
-		$this->sql = (string)$exporter;
+		else
+		{
+			$this->out('[' . $this->name . '] Preparing database tables and sample content is supported for MySQL only');
+		}
 	}
 
 	protected function addIndexFiles()
