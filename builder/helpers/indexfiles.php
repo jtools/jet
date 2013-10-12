@@ -39,11 +39,11 @@ class JBuilderHelperIndexfiles extends JBuilderHelperBase
 	{
 		if (is_null($this->path))
 		{
-			throw new BuildException("Missing attribute 'path'");
+			throw new DomainException("Missing attribute 'path'");
 		}
 		if (!is_dir($this->path))
 		{
-			throw new BuildException("'path' attribute not a valid path");
+			throw new DomainException("'path' attribute not a valid path");
 		}
 
 		$this->readDir($this->path . '/');
