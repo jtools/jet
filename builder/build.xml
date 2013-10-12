@@ -1,229 +1,231 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jet>
-	<common>
-			<!-- These settings are merged into 
-			every extension scope and get overwritten 
-			by the extension specific settings -->
-		<author>Joomla!</author>
-		<copyright>(C) 2005 - 2011 Open Source Matters. All rights reserved.</copyright>
-		<version>2.5</version>
-		<email>admin@joomla.org</email>
-		<website>http://www.joomla.org</website>
-		<license>GPL</license>
-		<joomlaversion>2.5</joomlaversion>
-	</common>
-	<components>
-		<component>
-			<name>com_banners</name>
-			<sql>
-				<table>#__banners</table>
-				<table>#__banner_clients</table>
-				<table>#__banner_tracks</table>
-			</sql>
-		</component>
-		<component>
-			<name>com_contact</name>
-			<sql>
-				<table>#__contact_details</table>
-			</sql>
-		</component>
-		<component>
-			<name>com_content</name>
-			<version>2.8</version>
-			<sql>
-				<table>#__content</table>
-				<table>#__content_frontpage</table>
-				<table>#__content_rating</table>
-			</sql>
-		</component>
-	</components>
-	<files>
-		<file>
-			<name>site-application</name>
-			<files>
-				<file>index.php</file>
-				<folder>includes</folder>
-			</files>
-		</file>
-	</files>
-	<languages>
-		<language>
-			<name>en-GB</name>
-			<client>administrator</client>
-			<tag>en-GB</tag>
-		</language>
-	</languages>
-	<libraries>
-		<library>
-			<name>joomla</name>
-			<files>
-				<folder>joomla</folder>
-			</files>
-		</library>
-	</libraries>
-	<modules>
-		<module>
-			<name>mod_menu</name>
-			<client>administrator</client>
-		</module>
-		<module>
-			<name>mod_languages</name>
-			<client>site</client>
-	<config>
-		<fieldset>
-			<field name="language"
-				type="list"
-				description="JFIELD_MODULE_LANGUAGE_DESC"
-				label="JFIELD_LANGUAGE_LABEL">
-				<option value="*">JALL</option>
-			</field>
-		</fieldset>
-		<fields name="params">
-			<fieldset name="basic">
-				<field
-					name="header_text"
-					type="textarea"
-					filter="safehtml"
-					rows="3"
-					cols="40"
-					label="MOD_LANGUAGES_FIELD_HEADER_LABEL"
-					description="MOD_LANGUAGES_FIELD_HEADER_DESC" />
+    <common>
+        <!-- These settings are merged into
+        every extension scope and get overwritten
+        by the extension specific settings -->
+        <author>Joomla!</author>
+        <copyright>(C) 2005 - 2011 Open Source Matters. All rights reserved.</copyright>
+        <version>2.5</version>
+        <email>admin@joomla.org</email>
+        <website>http://www.joomla.org</website>
+        <license>GPL</license>
+        <joomlaversion>2.5</joomlaversion>
+    </common>
+    <components>
+        <component>
+            <name>com_banners</name>
+            <sql>
+                <table>#__banners</table>
+                <table>#__banner_clients</table>
+                <table>#__banner_tracks</table>
+            </sql>
+        </component>
+        <component>
+            <name>com_contact</name>
+            <sql>
+                <table>#__contact_details</table>
+            </sql>
+        </component>
+        <component>
+            <name>com_content</name>
+            <version>2.8</version>
+            <sql>
+                <table>#__content</table>
+                <table>#__content_frontpage</table>
+                <table>#__content_rating</table>
+            </sql>
+        </component>
+    </components>
+    <files>
+        <file>
+            <name>site-application</name>
+            <files>
+                <file>index.php</file>
+                <folder>includes</folder>
+            </files>
+        </file>
+    </files>
+    <languages>
+        <language>
+            <name>en-GB</name>
+            <client>administrator</client>
+            <tag>en-GB</tag>
+        </language>
+    </languages>
+    <libraries>
+        <library>
+            <name>joomla</name>
+            <files>
+                <folder>joomla</folder>
+            </files>
+        </library>
+    </libraries>
+    <modules>
+        <module>
+            <name>mod_menu</name>
+            <client>administrator</client>
+        </module>
+        <module>
+            <name>mod_languages</name>
+            <client>site</client>
+            <config>
+                <fieldset>
+                    <field name="language"
+                           type="list"
+                           description="JFIELD_MODULE_LANGUAGE_DESC"
+                           label="JFIELD_LANGUAGE_LABEL">
+                        <option value="*">JALL</option>
+                    </field>
+                </fieldset>
+                <fields name="params">
+                    <fieldset name="basic">
+                        <field
+                            name="header_text"
+                            type="textarea"
+                            filter="safehtml"
+                            rows="3"
+                            cols="40"
+                            label="MOD_LANGUAGES_FIELD_HEADER_LABEL"
+                            description="MOD_LANGUAGES_FIELD_HEADER_DESC"/>
 
-				<field
-					name="footer_text"
-					type="textarea"
-					filter="safehtml"
-					rows="3"
-					cols="40"
-					label="MOD_LANGUAGES_FIELD_FOOTER_LABEL"
-					description="MOD_LANGUAGES_FIELD_FOOTER_DESC" />
+                        <field
+                            name="footer_text"
+                            type="textarea"
+                            filter="safehtml"
+                            rows="3"
+                            cols="40"
+                            label="MOD_LANGUAGES_FIELD_FOOTER_LABEL"
+                            description="MOD_LANGUAGES_FIELD_FOOTER_DESC"/>
 
-				<field
-					name="dropdown"
-					type="radio"
-					default="0"
-					label="MOD_LANGUAGES_FIELD_DROPDOWN_LABEL"
-					description="MOD_LANGUAGES_FIELD_DROPDOWN_DESC" >
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="spacer1" type="spacer" class="text"
-					label="MOD_LANGUAGES_SPACERDROP_LABEL"
-				/>
-				<field
-					name="image"
-					type="radio"
-					default="1"
-					label="MOD_LANGUAGES_FIELD_USEIMAGE_LABEL"
-					description="MOD_LANGUAGES_FIELD_USEIMAGE_DESC" >
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field
-					name="inline"
-					type="radio"
-					default="1"
-					label="MOD_LANGUAGES_FIELD_INLINE_LABEL"
-					description="MOD_LANGUAGES_FIELD_INLINE_DESC" >
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field
-					name="show_active"
-					type="radio"
-					default="1"
-					label="MOD_LANGUAGES_FIELD_ACTIVE_LABEL"
-					description="MOD_LANGUAGES_FIELD_ACTIVE_DESC" >
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="spacer2" type="spacer" class="text"
-					label="MOD_LANGUAGES_SPACERNAME_LABEL"
-				/>
-				<field
-					name="full_name"
-					type="radio"
-					default="1"
-					label="MOD_LANGUAGES_FIELD_FULL_NAME_LABEL"
-					description="MOD_LANGUAGES_FIELD_FULL_NAME_DESC" >
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-			</fieldset>
-			<fieldset name="advanced">
-				<field
-					name="layout"
-					type="modulelayout"
-					label="JFIELD_ALT_LAYOUT_LABEL"
-					description="MOD_LANGUAGES_FIELD_MODULE_LAYOUT_DESC" />
+                        <field
+                            name="dropdown"
+                            type="radio"
+                            default="0"
+                            label="MOD_LANGUAGES_FIELD_DROPDOWN_LABEL"
+                            description="MOD_LANGUAGES_FIELD_DROPDOWN_DESC">
+                            <option value="0">JNO</option>
+                            <option value="1">JYES</option>
+                        </field>
+                        <field name="spacer1" type="spacer" class="text"
+                               label="MOD_LANGUAGES_SPACERDROP_LABEL"
+                            />
+                        <field
+                            name="image"
+                            type="radio"
+                            default="1"
+                            label="MOD_LANGUAGES_FIELD_USEIMAGE_LABEL"
+                            description="MOD_LANGUAGES_FIELD_USEIMAGE_DESC">
+                            <option value="0">JNO</option>
+                            <option value="1">JYES</option>
+                        </field>
+                        <field
+                            name="inline"
+                            type="radio"
+                            default="1"
+                            label="MOD_LANGUAGES_FIELD_INLINE_LABEL"
+                            description="MOD_LANGUAGES_FIELD_INLINE_DESC">
+                            <option value="0">JNO</option>
+                            <option value="1">JYES</option>
+                        </field>
+                        <field
+                            name="show_active"
+                            type="radio"
+                            default="1"
+                            label="MOD_LANGUAGES_FIELD_ACTIVE_LABEL"
+                            description="MOD_LANGUAGES_FIELD_ACTIVE_DESC">
+                            <option value="0">JNO</option>
+                            <option value="1">JYES</option>
+                        </field>
+                        <field name="spacer2" type="spacer" class="text"
+                               label="MOD_LANGUAGES_SPACERNAME_LABEL"
+                            />
+                        <field
+                            name="full_name"
+                            type="radio"
+                            default="1"
+                            label="MOD_LANGUAGES_FIELD_FULL_NAME_LABEL"
+                            description="MOD_LANGUAGES_FIELD_FULL_NAME_DESC">
+                            <option value="0">JNO</option>
+                            <option value="1">JYES</option>
+                        </field>
+                    </fieldset>
+                    <fieldset name="advanced">
+                        <field
+                            name="layout"
+                            type="modulelayout"
+                            label="JFIELD_ALT_LAYOUT_LABEL"
+                            description="MOD_LANGUAGES_FIELD_MODULE_LAYOUT_DESC"/>
 
-				<field
-					name="moduleclass_sfx"
-					type="text"
-					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
-					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
-					
-				<field
-					name="cache"
-					type="list"
-					default="1"
-					label="COM_MODULES_FIELD_CACHING_LABEL"
-					description="COM_MODULES_FIELD_CACHING_DESC">
-					<option
-						value="1">JGLOBAL_USE_GLOBAL</option>
-					<option
-						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
-				</field>
-				
-				<field
-					name="cache_time"
-					type="text"
-					default="900"
-					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
-					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
-					
-						<field
-							name="cachemode"
-							type="hidden"
-							default="itemid">
-							<option
-								value="itemid"></option>
-						</field>
-					</fieldset>
-				</fields>
-			</config>
-		</module>
-	</modules>
-	<plugins>
-		<plugin>
-			<name>plg_system_debug</name>
-			<folder>system</folder>
-			<config></config>
-		</plugin>
-		<plugin>
-			<name>plg_system_highlight</name>
-			<folder>system</folder>
-			<config></config>
-		</plugin>
-	</plugins>
-	<templates>
-		<template>
-			<name>beez5</name>
-			<client>site</client>
-			<config></config>
-		</template>
-		<template>
-			<name>beez_20</name>
-			<client>site</client>
-			<config></config>
-		</template>
-	</templates>
-	<packages>
-		<package>
-			<name>Joomla1</name>
-			<extensions>
-				<extension type="component">com_content</extension>
-			</extensions>
-		</package>
-	</packages>
+                        <field
+                            name="moduleclass_sfx"
+                            type="text"
+                            label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                            description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+
+                        <field
+                            name="cache"
+                            type="list"
+                            default="1"
+                            label="COM_MODULES_FIELD_CACHING_LABEL"
+                            description="COM_MODULES_FIELD_CACHING_DESC">
+                            <option
+                                value="1">JGLOBAL_USE_GLOBAL
+                            </option>
+                            <option
+                                value="0">COM_MODULES_FIELD_VALUE_NOCACHING
+                            </option>
+                        </field>
+
+                        <field
+                            name="cache_time"
+                            type="text"
+                            default="900"
+                            label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+                            description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
+
+                        <field
+                            name="cachemode"
+                            type="hidden"
+                            default="itemid">
+                            <option
+                                value="itemid"></option>
+                        </field>
+                    </fieldset>
+                </fields>
+            </config>
+        </module>
+    </modules>
+    <plugins>
+        <plugin>
+            <name>plg_system_debug</name>
+            <folder>system</folder>
+            <config></config>
+        </plugin>
+        <plugin>
+            <name>plg_system_highlight</name>
+            <folder>system</folder>
+            <config></config>
+        </plugin>
+    </plugins>
+    <templates>
+        <template>
+            <name>beez5</name>
+            <client>site</client>
+            <config></config>
+        </template>
+        <template>
+            <name>beez_20</name>
+            <client>site</client>
+            <config></config>
+        </template>
+    </templates>
+    <packages>
+        <package>
+            <name>Joomla1</name>
+            <extensions>
+                <extension type="component">com_content</extension>
+            </extensions>
+        </package>
+    </packages>
 </jet>
