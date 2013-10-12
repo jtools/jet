@@ -26,7 +26,7 @@ class JBuilderModule extends JBuilderExtension
 			throw new Exception('*FATAL ERROR* Missing options!');
 		}
 
-		return parent::check();;
+		return parent::check();
 	}
 
 	public function build()
