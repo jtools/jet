@@ -1,28 +1,23 @@
 <?php
 /**
-* JET - Joomla Extension Tools
-*
-* A Tool to build extensions out of a Joomla development environment
-*
-* Options:
-*
-* build.php <build.xml> [options]
-* 
-* --help, -h - Try this first =;)
-* 
-* --joomla -j <path> - Path to the Joomla installation with the elements to build.
-* -n - 		Use new SQL processing feature.
-* -v - 		Verbose output.
-*
-* @author Hannes Papenberg - hackwar - 02/2012
-* @version 0.1
-* @license GPL SA
-* @link https://github.com/jtools/jet
-*/
+ * JET - Joomla Extension Tools
+ * A Tool to build extensions out of a Joomla development environment
+ * Options:
+ * build.php <build.xml> [options]
+ * --help, -h - Try this first =;)
+ * --joomla -j <path> - Path to the Joomla installation with the elements to build.
+ * -n -        Use new SQL processing feature.
+ * -v -        Verbose output.
+ *
+ * @author  Hannes Papenberg - hackwar - 02/2012
+ * @version 0.1
+ * @license GPL SA
+ * @link    https://github.com/jtools/jet
+ */
 
-define( '_JEXEC', 1 );
+define('_JEXEC', 1);
 define('JPATH_BASE', dirname(__FILE__));
-define('JPATH_ROOT', realpath(JPATH_BASE.'/../'));
+define('JPATH_ROOT', realpath(JPATH_BASE . '/../'));
 
 $GLOBALS['timer'] = explode(' ', microtime());
 
@@ -42,52 +37,64 @@ class JoomlaExtensionBuilder extends JApplicationCli
 
 	protected $joomlafolder = null;
 
+	/**
+	 * Run the application routines.
+	 *
+	 * @return  void
+	 */
 	protected function doExecute()
 	{
-		JLoader::discover('JBuilderHelper', JPATH_BASE.'/helpers/');
-		JLoader::discover('JBuilder', JPATH_BASE.'/extensions/');
-		JLoader::discover('JBuilderManifest', JPATH_BASE.'/manifest/');
-		JLoader::discover('J', JPATH_BASE.'/../libraries/joomla/filesystem/');
+		JLoader::discover('JBuilderHelper', JPATH_BASE . '/helpers/');
+		JLoader::discover('JBuilder', JPATH_BASE . '/extensions/');
+		JLoader::discover('JBuilderManifest', JPATH_BASE . '/manifest/');
+		JLoader::discover('J', JPATH_BASE . '/../libraries/joomla/filesystem/');
 
 		$this->out(str_repeat('=', 79));
-		$this->out('JOOMLA! EXTENSION TOOLS',true,true);
-		$this->out('Extension Builder',true,true);
+		$this->out('JOOMLA! EXTENSION TOOLS', true, true);
+		$this->out('Extension Builder', true, true);
 		$this->out(str_repeat('=', 79));
 
-		if($this->input->get('help') || $this->input->get('h'))
+		if ($this->input->get('help') || $this->input->get('h'))
 		{
 			$this->help();
 
-			return true;
+			return;
 		}
 		$this->loadPropertiesFromCLI();
 
-		if(count($this->input->args)) {
+		if (count($this->input->args))
+		{
 			$this->loadPropertiesFromFile($this->input->args[0]);
-		} else {
+		}
+		else
+		{
 			$this->loadPropertiesFromInput();
 		}
 
-		if(!$this->joomlafolder) {
+		if (!$this->joomlafolder)
+		{
 			$this->out('*FATAL ERROR* No Joomla installation as build source given!');
 			$this->close(1);
 		}
-		
-		$this->joomlafolder = realpath($this->joomlafolder).'/';
-		$this->buildfolder = realpath($this->buildfolder).'/';
-		
-		$config = JFactory::getConfig($this->joomlafolder.'configuration.php');
-		
+
+		$this->joomlafolder = realpath($this->joomlafolder) . '/';
+		$this->buildfolder  = realpath($this->buildfolder) . '/';
+
+		$config = JFactory::getConfig($this->joomlafolder . 'configuration.php');
+
 		$this->cleanBuildFolder();
 
 		$types = array();
 		define('JPATH_BUILDFOLDER', $this->buildfolder);
-		foreach($this->extensions as $extension) {
+		foreach ($this->extensions as $extension)
+		{
 			$folder = $this->isFolderPrepared($extension->getType(), $extension);
-			try {
+			try
+			{
 				$extension->check();
 				$extension->build();
-			} catch(Exception $e) {
+			} catch (Exception $e)
+			{
 				$this->out($e->getMessage());
 				$this->close(1);
 			}
@@ -95,12 +102,13 @@ class JoomlaExtensionBuilder extends JApplicationCli
 
 		$this->out('FINISHED!!');
 		$this->out('Statistics:');
-		foreach($types as $type => $count) {
-			$this->out($type.': '.$count);
+		foreach ($types as $type => $count)
+		{
+			$this->out($type . ': ' . $count);
 		}
 
 		$time = explode(' ', microtime());
-		$this->out('Time elapsed: '.(($time[0] - $GLOBALS['timer'][0]) + (float) ($time[1] - $GLOBALS['timer'][1])));
+		$this->out('Time elapsed: ' . (($time[0] - $GLOBALS['timer'][0]) + (float)($time[1] - $GLOBALS['timer'][1])));
 
 		$this->close(0);
 	}
@@ -119,86 +127,110 @@ build.php <build.xml> [options]
 -v - 		Verbose output.
 ');
 	}
-	
+
 	protected function loadPropertiesFromFile($file)
 	{
-		if(is_file($file)) {
+		if (is_file($file))
+		{
 			$path = $file;
-		} elseif(is_file(JPATH_BASE.'/'.$file)) {
-			$path = JPATH_BASE.'/'.$file;
-		} else {
+		}
+		elseif (is_file(JPATH_BASE . '/' . $file))
+		{
+			$path = JPATH_BASE . '/' . $file;
+		}
+		else
+		{
 			$this->out('FATAL ERROR: Could not read config file from given location');
 			$this->close(1);
 		}
-		$this->out('[config] Reading config data from '.$path);
+		$this->out('[config] Reading config data from ' . $path);
 
 		$xml = JFactory::getXML($path, true);
 
-		if(!$xml) {
+		if (!$xml)
+		{
 			$this->out('[config] Not a valid XML file');
 			$this->close(1);
 		}
 
-		if($xml->getName() != 'jet') {
+		if ($xml->getName() != 'jet')
+		{
 			$this->out('[config] Not a valid JET file');
 			$this->close(1);
 		}
 
-		if($common = $xml->xpath('common'))
+		if ($common = $xml->xpath('common'))
 		{
 			$allowedGlobalOptions = array('name', 'type', 'client');
-			foreach($common[0]->children() as $option) {
-				if(!in_array($option->getName(), $allowedGlobalOptions)) {
-					$this->options[$option->getName()] = (string) $option;
+			foreach ($common[0]->children() as $option)
+			{
+				if (!in_array($option->getName(), $allowedGlobalOptions))
+				{
+					$this->options[$option->getName()] = (string)$option;
 				}
-				if($option->getName() == 'joomla' && !$this->joomlafolder && is_dir((string) $option)) {
-					$this->joomlafolder = (string) $option;
+				if ($option->getName() == 'joomla' && !$this->joomlafolder && is_dir((string)$option))
+				{
+					$this->joomlafolder = (string)$option;
 				}
 			}
 		}
 
-		if(!$this->buildfolder) {
-			$this->buildfolder = $this->joomlafolder.'.build/';
-			if(!is_dir($this->buildfolder)) {
+		if (!$this->buildfolder)
+		{
+			$this->buildfolder = $this->joomlafolder . '.build/';
+			if (!is_dir($this->buildfolder))
+			{
 				JFolder::create($this->buildfolder);
-				$this->out('[info] Creating '.$this->buildfolder.' for building');
-			} else {
-				$this->out('[info] Using '.$this->buildfolder.' for building');
+				$this->out('[info] Creating ' . $this->buildfolder . ' for building');
+			}
+			else
+			{
+				$this->out('[info] Using ' . $this->buildfolder . ' for building');
 			}
 		}
 
 		$types = array(
 			'components' => 'component',
-			'files' => 'file',
-			'languages' => 'language',
-			'libraries' => 'library',
-			'modules' => 'module',
-			'plugins' => 'plugin',
-			'templates' => 'template',
-			'packages' => 'package'
+			'files'      => 'file',
+			'languages'  => 'language',
+			'libraries'  => 'library',
+			'modules'    => 'module',
+			'plugins'    => 'plugin',
+			'templates'  => 'template',
+			'packages'   => 'package'
 		);
 
-		foreach($types as $tag => $type) {
-			$extensions = $xml->xpath($tag.'/'.$type);
-			if(count($extensions) == 0) {
+		foreach ($types as $tag => $type)
+		{
+			$extensions = $xml->xpath($tag . '/' . $type);
+			if (count($extensions) == 0)
+			{
 				continue;
 			}
 
-			$options = call_user_func(array('JBuilder'.$type, 'getOptions'));
+			$options = call_user_func(array('JBuilder' . $type, 'getOptions'));
 
-			foreach($extensions as $extension) {
+			foreach ($extensions as $extension)
+			{
 				$opts = $this->options;
-				foreach($extension->children() as $exopt) {
-					if(!in_array($exopt->getName(), $options)) {
+				foreach ($extension->children() as $exopt)
+				{
+					if (!in_array($exopt->getName(), $options))
+					{
 						continue;
 					}
 
-					if($exopt->count()) {
+					if ($exopt->count())
+					{
 						$opts[$exopt->getName()] = $exopt;
-					} elseif(count($exopt->attributes())) {
+					}
+					elseif (count($exopt->attributes()))
+					{
 						$opts[$exopt->getName()] = $exopt->attributes();
-					} else {
-						$opts[$exopt->getName()] = (string) $exopt;
+					}
+					else
+					{
+						$opts[$exopt->getName()] = (string)$exopt;
 					}
 				}
 				$adapter = JBuilderExtension::getInstance($type, $opts);
@@ -219,45 +251,64 @@ build.php <build.xml> [options]
 
 	protected function loadPropertiesFromCLI()
 	{
-		if($this->input->get('v') || $this->input->get('verbose')) {
+		if ($this->input->get('v') || $this->input->get('verbose'))
+		{
 			$this->verbose = true;
 			$this->out('[config] verbose mode enabled');
 		}
 
-		if($this->input->get('j')) {
+		if ($this->input->get('j'))
+		{
 			$this->joomlafolder = $this->input->get('j', null, 'STRING');
-		} elseif($this->input->get('joomla')) {
+		}
+		elseif ($this->input->get('joomla'))
+		{
 			$this->joomlafolder = $this->input->get('joomla', null, 'STRING');
 		}
-		if($this->joomlafolder) {
-			if(is_dir($this->joomlafolder)){
-				$this->out('[info] Using '.$this->joomlafolder.' as build source');
-			} else {
+		if ($this->joomlafolder)
+		{
+			if (is_dir($this->joomlafolder))
+			{
+				$this->out('[info] Using ' . $this->joomlafolder . ' as build source');
+			}
+			else
+			{
 				$this->out('*FATAL ERROR* Given folder for Joomla installation is not reachable!');
 				$this->close(1);
 			}
 		}
 
-		if($this->input->get('b')) {
+		if ($this->input->get('b'))
+		{
 			$this->buildfolder = $this->input->get('b', null, 'STRING');
-		} elseif($this->input->get('build')) {
+		}
+		elseif ($this->input->get('build'))
+		{
 			$this->buildfolder = $this->input->get('build', null, 'STRING');
 		}
-		
-		if($this->input->get('n')) {
+
+		if ($this->input->get('n'))
+		{
 			$this->options['newSQL'] = true;
 		}
 
-		if($this->buildfolder) {
-			if(is_dir($this->buildfolder)){
-				$this->out('[info] Using '.$this->buildfolder.' for building');
+		if ($this->buildfolder)
+		{
+			if (is_dir($this->buildfolder))
+			{
+				$this->out('[info] Using ' . $this->buildfolder . ' for building');
 				define('JPATH_BUILDFOLDER', $this->buildfolder);
-			} else {
-				if(!JFolder::create($this->buildfolder)) {
+			}
+			else
+			{
+				if (!JFolder::create($this->buildfolder))
+				{
 					$this->out('*FATAL ERROR* Given folder for building is not reachable!');
 					$this->close(1);
-				} else {
-					$this->out('[info] Creating '.$this->buildfolder.' for building');
+				}
+				else
+				{
+					$this->out('[info] Creating ' . $this->buildfolder . ' for building');
 					define('JPATH_BUILDFOLDER', $this->buildfolder);
 				}
 			}
@@ -266,10 +317,11 @@ build.php <build.xml> [options]
 
 	protected function isFolderPrepared($type, $extension)
 	{
-		if(!is_dir($this->buildfolder.$type.'/'))
+		if (!is_dir($this->buildfolder . $type . '/'))
 		{
-			JFolder::create($this->buildfolder.$type.'/');
+			JFolder::create($this->buildfolder . $type . '/');
 		}
+
 		return true;
 	}
 
@@ -277,16 +329,21 @@ build.php <build.xml> [options]
 	{
 		$this->out('Cleaning up the build folder...');
 		$folders = JFolder::folders($this->buildfolder, '.', false, true);
-		if(count($folders)) {
+		if (count($folders))
+		{
 			$count = 0;
-			foreach($folders as $folder) {
-				if(!JFolder::delete($folder)) {
-					throw new Exception('Folder '.$folder.' could not be deleted!');
+			foreach ($folders as $folder)
+			{
+				if (!JFolder::delete($folder))
+				{
+					throw new Exception('Folder ' . $folder . ' could not be deleted!');
 				}
 				$count++;
 			}
-			$this->out('Deleted '.$count.' folders');
-		} else {
+			$this->out('Deleted ' . $count . ' folders');
+		}
+		else
+		{
 			$this->out('No folders to delete');
 		}
 	}
@@ -294,17 +351,19 @@ build.php <build.xml> [options]
 	/**
 	 * Write a string to standard output.
 	 *
-	 * @param   string   $text  The text to display.
-	 * @param   boolean  $nl    True (default) to append a new line at the end of the output string.
+	 * @param   string  $text  The text to display.
+	 * @param   boolean $nl    True (default) to append a new line at the end of the output string.
 	 *
 	 * @return  JApplicationCli  Instance of $this to allow chaining.
-	 *
 	 * @codeCoverageIgnore
 	 * @since   11.1
 	 */
 	public function out($text = '', $nl = true, $center = false)
 	{
-		if($center) $text = str_repeat(' ', (79 - strlen($text))/2).$text;
+		if ($center)
+		{
+			$text = str_repeat(' ', (79 - strlen($text)) / 2) . $text;
+		}
 
 		return parent::out($text, $nl);
 	}

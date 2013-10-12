@@ -29,17 +29,17 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	protected $client = null;
 	protected $dom = null;
 	protected $sql = null;
-	
+
 	public function __construct()
 	{
 		$this->type = strtolower(str_replace('JBuilderManifest', '', get_class($this)));
 	}
-	
+
 	public function setOption($key, $value)
 	{
 		$this->options[$key] = $value;
 	}
-	
+
 	public function setType($type)
 	{
 		$this->type = $type;
@@ -109,17 +109,17 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	{
 		$this->client = $client;
 	}
-	
+
 	public function setTag($tag)
 	{
 		$this->tag = $tag;
 	}
-	
+
 	public function setSQL($sql)
 	{
 		$this->sql = $sql;
 	}
-	
+
 	/**
 	 * Create Root node of the manifest
 	 */
@@ -128,16 +128,16 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		$this->dom = new DOMDocument();
 		$this->dom->encoding = 'utf-8';//set the document encoding
 		$this->dom->xmlVersion = '1.0';//set xml version
-		$this->dom->formatOutput = true;//Nicely formats output with indentation and extra space 
-		
+		$this->dom->formatOutput = true;//Nicely formats output with indentation and extra space
+
 		$root = $this->dom->createElement('extension');
 		$root->setAttribute('type', $this->type);
 		$root->setAttribute('method', 'upgrade');
 		$root->setAttribute('version', $this->jversion);
 
-		return $root;		
+		return $root;
 	}
-	
+
 	/**
 	 * Create the Metadata tags
 	 */
@@ -151,7 +151,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		else
 			$name = $this->dom->createElement($name, $this->extname);
 		$root->appendChild($name);
-		
+
 		$author = $this->dom->createElement('author', $this->author);
 		$creation = $this->dom->createElement('creationDate', date('F Y'));
 		$copyright = $this->dom->createElement('copyright', $this->copyright);
@@ -169,12 +169,12 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		$root->appendChild($authorurl);
 		$root->appendChild($version);
 		$root->appendChild($description);
-		
+
 		return $root;
 	}
 
 	/**
-	 * This method generates the media tag 
+	 * This method generates the media tag
 	 */
 	protected function createMedia($root)
 	{
@@ -185,7 +185,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 			$mediafiles = $this->filelist($this->buildfolder.'/media/', $mediafiles);
 			$root->appendChild($mediafiles);
 		}
-		
+
 		return $root;
 	}
 
@@ -202,10 +202,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 			$scripttag = $this->dom->createElement('scriptfile', $this->extname.'.script.php');
 			$root->appendChild($scripttag);
 		}
-		
+
 		return $root;
 	}
-	
+
 	/**
 	 * This method adds the necessary SQL tags
 	 */
@@ -228,9 +228,9 @@ class JBuilderManifestBase extends JBuilderHelperBase
 			$path = $this->buildfolder;
 			if($this->type == 'component')
 				$path .= '/admin';
-			
+
 			if(is_dir($path.'/sql')) {
-				
+
 				if(file_exists($path.'/sql/install.mysql.utf8.sql')) {
 					$install = $this->dom->createElement('install');
 					$sql = $this->dom->createElement('sql');
@@ -249,7 +249,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 					$install->appendChild($sql);
 					$root->appendChild($install);
 				}
-			
+
 				if(file_exists($path.'/sql/uninstall.mysql.utf8.sql')) {
 					$uninstall = $this->dom->createElement('uninstall');
 					$sql = $this->dom->createElement('sql');
@@ -268,7 +268,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 					$uninstall->appendChild($sql);
 					$root->appendChild($uninstall);
 				}
-			
+
 				if(is_dir($path.'/sql/updates')) {
 					$update = $this->dom->createElement('update');
 					$schemas = $this->dom->createElement('schemas');
@@ -301,10 +301,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 			}
 			$root->appendChild($tables);
 		}
-		
+
 		return $root;
 	}
-	
+
 	/**
 	 * This method handles the updatesites tags
 	 */
@@ -323,10 +323,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 			}
 			$root->appendChild($updates);
 		}
-		
+
 		return $root;
 	}
-	
+
 	/**
 	 * This method handles the language tags
 	 */
@@ -335,10 +335,10 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		if(is_dir($this->buildfolder.'lang/')) {
 			return $this->createLanguageTag($root, 'lang/');
 		}
-		
+
 		return $root;
 	}
-	
+
 	protected function createLanguageTag($root, $folder)
 	{
 		$lang = $this->dom->createElement('languages');
@@ -361,7 +361,7 @@ class JBuilderManifestBase extends JBuilderHelperBase
 	protected function filelist($folder, $dom, $exclude = array())
 	{
 		if(!is_dir($folder)) {
-			return;
+			return null;
 		}
 		$files = array();
 		$folders = array();
@@ -379,17 +379,17 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		}
 		sort($files);
 		sort($folders);
-		
+
 		foreach($files as $file) {
 			$e = $this->dom->createElement('file', $file);
 			$dom->appendChild($e);
 		}
-		
+
 		foreach($folders as $folder) {
 			$e = $this->dom->createElement('folder', $folder);
 			$dom->appendChild($e);
 		}
-		
+
 		return $dom;
 	}
 
@@ -398,15 +398,15 @@ class JBuilderManifestBase extends JBuilderHelperBase
 		if (!isset($this->type)) {
 			throw new Exception("Missing attribute 'type'");
 		}
-		
+
 		if (!isset($this->extname)) {
 			throw new Exception("Missing attribute 'extname'");
 		}
-		
+
 		if (!isset($this->buildfolder)) {
 			throw new Exception("Missing attribute 'buildfolder'");
 		}
-		
+
 		if (!isset($this->version)) {
 			throw new Exception("Missing attribute 'version'");
 		}
