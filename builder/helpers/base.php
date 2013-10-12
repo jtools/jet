@@ -13,7 +13,7 @@ class JBuilderHelperBase
 {
 	public function log($msg)
 	{
-		$cli = JCli::getInstance();
+		$cli = JApplicationCli::getInstance();
 		$cli->out($msg);
 	}
 }
